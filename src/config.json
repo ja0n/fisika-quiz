@@ -1,0 +1,6 @@
+{
+	"environment": "development",
+	"dbURI": "mongodb://localhost/fisika"
+
+
+}

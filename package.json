@@ -1,0 +1,20 @@
+{
+  "name": "agua-ja-api",
+  "version": "1.0.0",
+  "description": "Edoo's API.",
+  "main": "app.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/www"
+  },
+  "author": "ja0n",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.12.0",
+    "cookie-parser": "^1.3.4",
+    "cookie-session": "^1.1.0",
+    "express": "^4.12.0",
+    "mongoose": "^4.0.1"
+  }
+}
