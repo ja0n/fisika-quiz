@@ -6,44 +6,12 @@
 			var path;
 			return path = $location.path(), _.contains(["/404", "/pages/500", "/pages/login", "/pages/signin", "/pages/signin1", "/pages/signin2", "/pages/signup", "/pages/signup1", "/pages/signup2"], path)
 		}, $scope.main = {
-			brand: "AguaJá",
+			brand: "Fisika",
 			name: "Jaon Boe"
 		}
 	}])
-	.controller("CreatePlaceCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
+	.controller("CreateQuizCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
 		var marker;
-
-		function getLocation() {
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(initialize);
-			} else {
-				console.log("Geolocation is not supported by this browser.");
-			}
-		}
-
-		function initialize(position) {
-			var mapOptions = {
-				//center: new google.maps.LatLng(-34.397, 150.644),
-				center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-				zoom: 16,
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-			var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-			google.maps.event.addListener(map, 'click', function(e) {
-    		placeMarker(e.latLng, map);
-			});
-		}
-
-		function placeMarker(position, map) {
-			$scope.place.coords = {lat: position.lat(), lng: position.lng()};
-			$scope.$apply();
-			if(marker) marker.setMap(null);
-		  marker = new google.maps.Marker({
-		    position: position,
-		    map: map
-		  });
-		  //map.panTo(position);
-		}
 
 		var original;
 		$scope.place = {
@@ -65,9 +33,9 @@
 							&& $scope.place.coords.lat && $scope.place.coords.lng
 		}
 		$scope.submitForm = function() {
-			var url = 'http://' + location.hostname + ':3000/api/places';
+			var url = 'http://' + location.hostname + ':3000/api/professors';
 	    $http.post(url, $scope.place).success(function(data) {
-	      $location.path('/places');
+	      $location.path('/professors');
 	    	$scope.revert()
 	      return logger.logSuccess('Operação realizada com sucesso.');
 
@@ -77,98 +45,15 @@
 		}
 		getLocation();
 	}])
-	.controller("ViewPlacesCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
-		var url = 'http://' + location.hostname + ':3000/api/places';
+	.controller("ViewQuizzesCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
+		var url = 'http://' + location.hostname + ':3000/api/quizzes';
 		$http.get(url).success(function(data) {
 			$scope.viewData = data;
 		});
 
 	}])
-	.controller("PlacesInMapCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
-		var map;
-
-		function getLocation() {
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(initialize);
-			} else {
-				console.log("Geolocation is not supported by this browser.");
-			}
-		}
-
-		function initialize(position) {
-			var mapOptions = {
-				//center: new google.maps.LatLng(-34.397, 150.644),
-				center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-				zoom: 16,
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-			map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
-			var url = 'http://' + location.hostname + ':3000/api/places';
-			$http.get(url).success(function(data) {
-				loadMarkers(map, data);
-			});
-		}
-
-		function placeMarker(position, map) {
-			$scope.marker.coords = {lat: position.lat(), lng: position.lng()};
-			$scope.$apply();
-			if(marker) marker.setMap(null);
-		  marker = new google.maps.Marker({
-		    position: position,
-		    map: map
-		  });
-
-		  //map.panTo(position);
-		}
-
-		function loadMarkers(map, markers) {
-			markers.forEach(function(marker) {
-				var position = new google.maps.LatLng(marker.coords.lat, marker.coords.lng);
-				new google.maps.Marker({
-			    position: position,
-			    map: map
-			  });
-			});
-
-		}
-
-		getLocation();
-	}])
-	.controller("CreateClientCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
+	.controller("CreateStudentCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
 		var marker;
-
-		function getLocation() {
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(initialize);
-			} else {
-				console.log("Geolocation is not supported by this browser.");
-			}
-		}
-
-		function initialize(position) {
-			var mapOptions = {
-				//center: new google.maps.LatLng(-34.397, 150.644),
-				center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-				zoom: 16,
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-			var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-			google.maps.event.addListener(map, 'click', function(e) {
-    		placeMarker(e.latLng, map);
-			});
-		}
-
-		function placeMarker(position, map) {
-			$scope.client.coords = {lat: position.lat(), lng: position.lng()};
-			$scope.$apply();
-			if(marker) marker.setMap(null);
-		  marker = new google.maps.Marker({
-		    position: position,
-		    map: map
-		  });
-		  //map.panTo(position);
-		}
 
 		var original;
 		$scope.client = {
@@ -204,16 +89,15 @@
 	      logger.logError("Ocorreu algum problema.");
 	    });
 		}
-		getLocation();
 	}])
-	.controller("ViewClientsCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
+	.controller("ViewStudentsCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
 		var url = 'http://' + location.hostname + ':3000/api/clients';
 		$http.get(url).success(function(data) {
 			$scope.viewData = data;
 		});
 	}])
-	.controller("CreateDealerCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
-		var url = 'http://' + location.hostname + ':3000/api/places';
+	.controller("CreateProfessorsCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
+		var url = 'http://' + location.hostname + ':3000/api/professors';
 		$http.get(url).success(function(data) {
 			$scope.selectData = data;
 		});
@@ -237,9 +121,9 @@
 			return $scope.dealer_form.$valid && !angular.equals($scope.dealer, original)
 		}
 		$scope.submitForm = function() {
-			var url = 'http://' + location.hostname + ':3000/api/dealers';
+			var url = 'http://' + location.hostname + ':3000/api/professors';
 	    $http.post(url, $scope.dealer).success(function(data) {
-	      $location.path('/dealers');
+	      $location.path('/professors');
 	    	$scope.revert()
 	      return logger.logSuccess('Operação realizada com sucesso.');
 
@@ -248,8 +132,8 @@
 	    });
 		}
 	}])
-	.controller("ViewDealersCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
-		var url = 'http://' + location.hostname + ':3000/api/dealers';
+	.controller("ViewProfessorsCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
+		var url = 'http://' + location.hostname + ':3000/api/professors';
 		$http.get(url).success(function(data) {
 			$scope.viewData = data;
 		});

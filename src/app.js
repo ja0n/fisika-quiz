@@ -24,6 +24,7 @@ app.use(utils.cors);
 
 app.use('/api/*', function(req, res, next) {
   delete req.body.hash; delete req.body.salt;
+  console.log(req.session.user)
   if(!req.session.user._id) {
     res.status(401);
     res.json({ err: 'login!!!' });

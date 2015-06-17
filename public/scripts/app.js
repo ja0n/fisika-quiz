@@ -7,20 +7,33 @@
 			templateUrl: 'views/dashboard.html'
 		}).when('/test', {
 			templateUrl: 'views/forms/validation.html'
-		}).when('/places', {
-			templateUrl: 'views/places/view.html'
-		}).when('/places/create', {
-			templateUrl: 'views/places/form.html'
-		}).when('/places/map', {
-			templateUrl: 'views/places/viewInMap.html'
-		}).when('/clients', {
-			templateUrl: 'views/clients/view.html'
-		}).when('/clients/create', {
-			templateUrl: 'views/clients/form.html'
-		}).when('/dealers', {
-			templateUrl: 'views/dealers/view.html'
-		}).when('/dealers/create', {
-			templateUrl: 'views/dealers/form.html'
+		}).when('/professors', {
+			templateUrl: 'views/professors/view.html',
+			controller: 'ViewProfessorsCtrl'
+		}).when('/professors/create', {
+			templateUrl: 'views/professors/form.html',
+			controller: 'CreateProfessorCtrl'
+		}).when('/professors/edit', {
+			templateUrl: 'views/professors/form.html',
+			controller: 'CreateProfessorCtrl'
+		}).when('/students', {
+			templateUrl: 'views/students/view.html',
+			controller: 'ViewStudentsCtrl'
+		}).when('/students/create', {
+			templateUrl: 'views/students/form.html',
+			controller: 'CreateStudentCtrl'
+		}).when('/students/edit', {
+			templateUrl: 'views/students/form.html',
+			controller: 'CreateStudentCtrl'
+		}).when('/quizzes', {
+			templateUrl: 'views/quizzes/view.html',
+			controller: 'ViewQuizzesCtrl'
+		}).when('/quizzes/create', {
+			templateUrl: 'views/quizzes/form.html',
+			controller: 'CreateQuizCtrl'
+		}).when('/quizzes/edit', {
+			templateUrl: 'views/quizzes/form.html',
+			controller: 'CreateQuizCtrl'
 		}).when('/pages/features', {
 			templateUrl: 'views/pages/features.html'
 		}).when('/pages/signin', {
