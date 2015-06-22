@@ -10,9 +10,7 @@
 			name: "Jaon Boe"
 		}
 	}])
-	.controller("CreateQuizCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
-		var marker;
-
+	.controller("CreateQuizCtrl",  function($scope, $http, $location, $modal, logger) {
 		var original;
 		$scope.place = {
 			name: '',
@@ -21,6 +19,44 @@
 			telephones: '',
 			coords: {}
 		}
+
+		$scope.openModal = function(discipline_id) {
+	    var modalInstance;
+	    modalInstance = $modal.open({
+	      templateUrl: "scheduleTmpl.html",
+	      controller: function($scope, $rootScope, $modalInstance, items) {
+	        $scope.items = items;
+	        $scope.schedule = { start_time: new Date(), duration: 0 };
+	        $scope.dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+	        $scope.discipline_id = discipline_id;
+
+	        $scope.ok = function() {
+	          $modalInstance.close();
+	        };
+	        $scope.cancel = function() {
+	          $modalInstance.dismiss("cancel");
+	        };
+	        $scope.add = function() {
+	          var time = $scope.schedule.start_time;
+	          $scope.schedule.start_time = { hours: time.getHours(), minutes: time.getMinutes() };
+	          $scope.schedule.discipline_id = discipline_id;
+	          $scope.items.push($scope.schedule);
+	          $scope.schedule = { start_time: new Date(), duration: 0 };
+	        };
+	      },
+	      resolve: {
+	        items: function() {
+	          //return $scope.user.disciplines[discipline_id].schedule;
+	          return $scope.user.schedule;
+	        }
+	      }
+	    }), modalInstance.result.then(function(selectedItem) {
+	      $scope.selected = selectedItem
+	    }, function() {
+	      //$log.info("Modal dismissed at: " + new Date)
+	    })
+	  };
+
 		$scope.showInfoOnSubmit = !1, original = angular.copy($scope.place);
 		$scope.revert = function() {
 			return $scope.place = angular.copy(original), $scope.place_form.$setPristine()
@@ -43,15 +79,14 @@
 	      logger.logError("Ocorreu algum problema.");
 	    });
 		}
-		getLocation();
-	}])
-	.controller("ViewQuizzesCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
+	})
+	.controller("ViewQuizzesCtrl", function($scope, $http, $location, logger) {
 		var url = 'http://' + location.hostname + ':3000/api/quizzes';
 		$http.get(url).success(function(data) {
 			$scope.viewData = data;
 		});
 
-	}])
+	})
 	.controller("CreateStudentCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
 		var marker;
 
@@ -96,7 +131,7 @@
 			$scope.viewData = data;
 		});
 	}])
-	.controller("CreateProfessorsCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
+	.controller("CreateProfessorCtrl", ["$scope", "$http", "$location", "logger", function($scope, $http, $location, logger) {
 		var url = 'http://' + location.hostname + ':3000/api/professors';
 		$http.get(url).success(function(data) {
 			$scope.selectData = data;
@@ -106,9 +141,6 @@
 			name: '',
 			email: '',
 			password: '',
-			description: '',
-			place_id: '',
-			telephones: '',
 		}
 		$scope.showInfoOnSubmit = !1, original = angular.copy($scope.dealer);
 		$scope.revert = function() {

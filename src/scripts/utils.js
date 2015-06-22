@@ -3,6 +3,7 @@ var path = require('path')
   , fs = require('fs')
   , express = require('express')
   , pwd = require('./pwd')
+  , config = require('../config')
   ;
 
 module.exports = {
@@ -30,7 +31,7 @@ module.exports = {
     next();
   },
   createAdmin: function(data, db) {
-    if(!db) var db = require('./db')('mongodb://localhost/fisika');
+    if(!db) var db = require('./db')(config.dbURI);
     var collection = db.collection('users');
     pwd.hash(data.password, function(err, salt, hash) {
       if (err) throw err;

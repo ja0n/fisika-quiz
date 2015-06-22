@@ -11,14 +11,11 @@
 		}, {
 			log: function(message) {
 				logIt(message, "info")
-			},
-			logWarning: function(message) {
+			}, logWarning: function(message) {
 				logIt(message, "warning")
-			},
-			logSuccess: function(message) {
+			}, logSuccess: function(message) {
 				logIt(message, "success")
-			},
-			logError: function(message) {
+			}, logError: function(message) {
 				logIt(message, "error")
 			}
 		}

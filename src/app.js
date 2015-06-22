@@ -24,7 +24,13 @@ app.use(utils.cors);
 
 app.use('/api/*', function(req, res, next) {
   delete req.body.hash; delete req.body.salt;
-  console.log(req.session.user)
+  if (req.session.user) next();
+  else {
+    res.status(401);
+    res.json({ err: 'You Shall Not Pass!!!'});
+  }
+
+  return //daqui pra tem q ajeitar
   if(!req.session.user._id) {
     res.status(401);
     res.json({ err: 'login!!!' });
@@ -46,7 +52,7 @@ app.use('/api/*', function(req, res, next) {
   });
 });
 
-app.post('/api/(|dealers|clients)', function(req, res, next) {
+app.post('/api/(|professors|students)', function(req, res, next) {
   //if (req.session.user.role != 'admin') res.json({ err: true, msg: 'You Shall Not Pass!!!'});
   if (!req.body.password) res.json({ err: true, msg: 'password required!' });
   else {
