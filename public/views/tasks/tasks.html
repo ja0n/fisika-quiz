@@ -17,7 +17,7 @@
                 <section>
                     <ul class="filters list-inline nav nav-tabs">
                         <li data-ng-class="{active: statusFilter == ''}">
-                            <a href="" 
+                            <a href=""
                                data-toggle="tab"
                                data-ng-click="filter('all')"
                                >All</a>
@@ -37,9 +37,9 @@
                     </ul>
                 </section>
 
-                <section  data-ng-cloak>
+                <section data-ng-cloak>
                     <ul class="task-list list-unstyled">
-                        <li data-ng-repeat="task in tasks | filter:statusFilter track by $index" 
+                        <li data-ng-repeat="task in tasks | filter:statusFilter track by $index"
                             data-ng-class="{completed: task.completed, editing: task == editedTask}">
                             <span class="view">
                                 <input type="checkbox"
@@ -80,16 +80,16 @@
                                 <span class="text-muted"
                                       data-ng-pluralize count="remainingCount"
                                       when="{one: 'item left', other: 'items left'}"></span>
-                            </span>                            
+                            </span>
                         </li>
                         <li class="text-right">
                             <span class="clear-completed"
                                   data-ng-click="clearCompleted()"
-                                  data-ng-show="remainingCount < tasks.length">Clear completed ({{tasks.length - remainingCount}})</span>                            
+                                  data-ng-show="remainingCount < tasks.length">Clear completed ({{tasks.length - remainingCount}})</span>
                         </li>
                     </ul>
                 </footer>
-                
+
             </section>
         </div>
     </div>

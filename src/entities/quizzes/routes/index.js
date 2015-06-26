@@ -13,7 +13,7 @@ var routes = {
   },
   '/:id':  {
     get: Controller.retrieveById
-  , post: null
+  , post: Controller.submitById
   , put: Controller.modifyById
   , delete: Controller.removeById
   }

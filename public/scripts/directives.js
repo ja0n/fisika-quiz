@@ -192,6 +192,7 @@ function() {
 						case "/pages/500":
 						case "/pages/signin":
 						case "/pages/signup":
+						case "/login":
 							return $element.addClass("body-special");
 						case "/tasks":
 							return $element.addClass("body-tasks")

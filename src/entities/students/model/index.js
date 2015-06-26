@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 	, Schema = mongoose.Schema
 	, _schema = require('./../schema')
-	, modelName = 'Client'
+	, modelName = 'Student'
 	, collectionName = 'users'
 	;
 

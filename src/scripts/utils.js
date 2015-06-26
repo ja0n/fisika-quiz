@@ -30,7 +30,7 @@ module.exports = {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
   },
-  createAdmin: function(data, db) {
+  createUser: function(data, db) {
     if(!db) var db = require('./db')(config.dbURI);
     var collection = db.collection('users');
     pwd.hash(data.password, function(err, salt, hash) {

@@ -1,103 +1,111 @@
 <div class="page page-tasks">
-    <div class="row">
-        <div class="col-md-12">
-            <section class="task-container" data-ng-controller="taskCtrl">
-
-                <form data-ng-submit="add()" class="add-task">
-                    <input type="text"
-                           placeholder="What needs to be done?"
-                           class="form-control"
-                           data-ng-model="newTask"
-                           autofocus>
-                    <a type="submit" class="submit-button" data-ng-click="add()">
-                        <span class="glyphicon glyphicon-plus"></span>
-                    </a>
-                </form>
-
-                <section>
-                    <ul class="filters list-inline nav nav-tabs">
-                        <li data-ng-class="{active: statusFilter == ''}">
-                            <a href="" 
-                               data-toggle="tab"
-                               data-ng-click="filter('all')"
-                               >All</a>
-                        </li>
-                        <li data-ng-class="{active: statusFilter.completed == false }">
-                            <a href=""
-                               data-toggle="tab"
-                               data-ng-click="filter('active')"
-                               >Active</a>
-                        </li>
-                        <li data-ng-class="{active: statusFilter.completed == true }">
-                            <a href=""
-                               data-toggle="tab"
-                               data-ng-click="filter('completed')"
-                               >Completed</a>
-                        </li>
-                    </ul>
-                </section>
-
-                <section  data-ng-cloak>
-                    <ul class="task-list list-unstyled">
-                        <li data-ng-repeat="task in tasks | filter:statusFilter track by $index" 
-                            data-ng-class="{completed: task.completed, editing: task == editedTask}">
-                            <span class="view">
-                                <input type="checkbox"
-                                       class="toggle-task"
-                                       data-ng-model="task.completed"
-                                       data-ng-change="completed(task)">
-                                <label data-ng-dblclick="edit(task)">{{task.title}}</label>
-                                <span class="glyphicon glyphicon-pencil"
-                                      data-ng-click="edit(task)"></span>
-                                <span class="glyphicon glyphicon-remove"
-                                      data-ng-click="remove(task, $index)"
-                                      ></span>
-                            </span>
-                            <form data-ng-submit="doneEditing(task, $index)">
-                                <input type="text"
-                                       class="edit form-control"
-                                       data-ng-trim="false"
-                                       data-ng-model="task.title"
-                                       data-ng-blur="doneEditing(task, $index)"
-                                       data-task-focus="task == editedTask">
-                            </form>
-                        </li>
-                    </ul>
-                </section>
-
-                <footer class="task-footer">
-                    <ul class="list-inline clearfix">
-                        <li class="first-item">
-                            <input type="checkbox"
-                                   id="toggle-all"
-                                   data-ng-model="allChecked"
-                                   data-ng-change="markAll(allChecked)">
-                            <label for="toggle-all">Mark all as done</label>
-                        </li>
-                        <li class="text-center">
-                            <span>
-                                <strong>{{remainingCount}}</strong>
-                                <span class="text-muted"
-                                      data-ng-pluralize count="remainingCount"
-                                      when="{one: 'item left', other: 'items left'}"></span>
-                            </span>                            
-                        </li>
-                        <li class="text-right">
-                            <span class="clear-completed"
-                                  data-ng-click="clearCompleted()"
-                                  data-ng-show="remainingCount < tasks.length">Clear completed ({{tasks.length - remainingCount}})</span>                            
-                        </li>
-                    </ul>
-                </footer>
-                
+        <section class="">
+            <!-- <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Criar Marcação</strong></div>
+            <div class="panel-body"> -->
+            <section>
+                <h3>Criar Lista de Exercícios</h3>
+                <input type="text"
+                       class="edit form-control"
+                       data-ng-trim="false"
+                       data-ng-model="quizz.name"
+                       placeholder="Nome da Lista">
+                <div class="divider"></div>
+                <button class="btn btn-gap btn-info" data-ng-click="addQuestion()">Adicionar Questão</button>
+                <tabset justified="true" class="ui-tab">
+                    <tab ng-repeat="question in quizz.questions" heading="{{question.title}}" active="question.active" disabled="question.disabled">
+                        <ul class="task-list list-unstyled">
+                            <li data-ng-class="{ editing: question == editedQ }">
+                                <span class="view">
+                                    <label data-ng-dblclick="editedQ = question">{{question.description}}</label>
+                                    <span class="glyphicon glyphicon-pencil"
+                                          data-ng-click="editedQ = question"></span>
+                                    <span class="glyphicon glyphicon-remove"
+                                          data-ng-click="remove(question)"
+                                          ></span>
+                                </span>
+                                <form data-ng-submit="editedQ = null">
+                                    <textarea type="text"
+                                           class="edit form-control"
+                                           data-ng-trim="false"
+                                           data-ng-model="question.description"
+                                           data-ng-blur="editedQ = null"
+                                           data-task-focus="question == editedQ"> </textarea>
+                                </form>
+                            </li>
+                        </ul>
+                        <form data-ng-submit="addAlt(question.alternatives, this)" class="add-task">
+                            <input type="text"
+                                   placeholder="Adicionar Alternativa"
+                                   class="form-control"
+                                   data-ng-model="newAlt"
+                                   autofocus>
+                            <a type="submit" class="submit-button" data-ng-click="addAlt(question.alternatives, this)">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
+                        </form><br>
+                        <ul class="task-list list-unstyled">
+                            <li data-ng-repeat="task in question.alternatives"
+                                data-ng-class="{completed: task.completed, editing: task == editedTask}">
+                                <span class="view">
+                                    <input type="radio"
+                                           class="toggle-task"
+                                           name="question{{$parent.$index}}"
+                                           data-ng-model="question.answer"
+                                           data-ng-value="$index">
+                                    <label data-ng-dblclick="edit(task)">{{ indexChar($index) + ') '}}{{task.description}}</label>
+                                    <span class="glyphicon glyphicon-pencil"
+                                          data-ng-click="edit(task)"></span>
+                                    <span class="glyphicon glyphicon-remove"
+                                          data-ng-click="remove(task, question.alternatives, $index)"
+                                          ></span>
+                                </span>
+                                <form data-ng-submit="doneEditing(task, $index, $event)">
+                                    <input type="text"
+                                           class="edit form-control"
+                                           data-ng-trim="false"
+                                           data-ng-model="task.description"
+                                           data-ng-blur="doneEditing(task, $index, $event)"
+                                           data-task-focus="task == editedTask">
+                                </form>
+                            </li>
+                        </ul>
+                    </tab>
+                </tabset>
             </section>
-        </div>
-    </div>
+
+            <footer class="task-footer">
+                <ul class="list-inline clearfix">
+                    <li class="first-item">
+                        <form data-ng-submit="submitForm()">
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    data-ng-disabled="!canSubmit()"
+                                    >Sumbit</button>
+                        </form>
+                    </li>
+                    <li class="text-center">
+                        <span>
+                            <strong>{{remainingCount}}</strong>
+                            <span class="text-muted"
+                                  data-ng-pluralize count="remainingCount"
+                                  when="{one: 'item left', other: 'items left'}"></span>
+                        </span>
+                    </li>
+                    <li class="text-right">
+                        <span class="clear-completed"
+                              data-ng-click="clearCompleted()"
+                              data-ng-show="remainingCount < tasks.length">Clear completed ({{tasks.length - remainingCount}})</span>
+                    </li>
+                </ul>
+            </footer>
+
+        </section>
+    <!-- </div> -->
 
     <div class="callout callout-info">
-        <p>Tips:</p>
-        <p> - Double click the task (or click the edit icon on the right of the task) to edit, then click anywhere else done editing.</p>
-        <p> - Type a something needs to done, then press "return" key (or the plus icon on the left) to add a new task</p>
-        <p> - Click the remove icon on the right of the task to remove</p>
+        <p>Obs:</p>
+        <p> - hehehe</p>
+        <p> - hehe</p>
+        <p> - he</p>
     </div>
 </div>

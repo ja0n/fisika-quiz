@@ -10,6 +10,8 @@ var express = require('express')
   , ObjectID = require('mongodb').ObjectID
   ;
 
+global.ObjectID = ObjectID;
+
 var app = express();
 
 /*
