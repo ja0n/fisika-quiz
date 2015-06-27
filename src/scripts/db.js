@@ -19,7 +19,7 @@ module.exports = function(dbURI) {
 	});
 
 	process.on('SIGINT', function() {
-		mongoose.connection.close(function () {
+		db.close(function () {
 			console.log('Conexão com o Mongoose fechada');
 			process.exit(0);
 		});

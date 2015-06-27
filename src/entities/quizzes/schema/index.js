@@ -1,10 +1,8 @@
-var mongoose = require('mongoose')
-	, Schema = mongoose.Schema
-	;
+var ObjectId = require('mongoose').Schema.Types.ObjectId;
 
 var Schema = {
 			name: { type: String, required: true }
-		, professor_id: { type: Schema.Types.ObjectId, ref: 'Professor', required: true }
+		, professor: { type: ObjectId, ref: 'Professor', required: true }
 		,	description: { type: String }
 		, questions: [{
 				title: { type: String, required: true }
@@ -15,7 +13,7 @@ var Schema = {
 				}]
 			}]
 		,	submissions: [{
-				student_id: { type: Schema.Types.ObjectId, ref: 'Student', required: true }
+				student: { type: ObjectId, ref: 'Student', required: true }
 			, answers: [{ type: Number, required: true }]
 			, time_spent: { type: Number, required: true }
 

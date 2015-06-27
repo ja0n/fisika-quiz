@@ -31,7 +31,7 @@ module.exports = {
     next();
   },
   createUser: function(data, db) {
-    if(!db) var db = require('./db')(config.dbURI);
+    if(!db) db = require('./db')(config.dbURI);
     var collection = db.collection('users');
     pwd.hash(data.password, function(err, salt, hash) {
       if (err) throw err;
@@ -39,8 +39,8 @@ module.exports = {
       data.salt = salt;
       data.hash = hash.toString();
       collection.insert(data, function(err, data) {
-        if(err) console.log(err);
-        else console.log('success', data);
+        if(err) console.log('Error: ', err);
+        else console.log('Success: ', data);
       });
     });
   },

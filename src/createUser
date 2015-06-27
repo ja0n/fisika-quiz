@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+// Usage: createUser <name> <role> <email> <password>
+var utils = require('./scripts/utils');
+
+console.log("Usage: createUser <name> <role> <email> <password> \n");
+
+utils.createUser(
+{ name: process.argv[2]
+, role: process.argv[3]
+, email: process.argv[4]
+, password: process.argv[5]
+});

@@ -1,10 +1,12 @@
 var Model = require('./../model')
 	, Controller = {}
 	;
+
+var ObjectId = require('mongoose').Types.ObjectId;
+
 Controller.create = function (req, res) {
 	var data = req.body;
-
-	data['professor_id'] = new ObjectID(req.session.user._id);
+	data['professor'] = new ObjectId(req.session.user._id);
 
 	var model = new Model(data);
 
@@ -19,7 +21,7 @@ Controller.create = function (req, res) {
 Controller.retrieveAll = function (req, res) {
 	var query = { };
 
-	Model.find(query, { hash: 0, salt: 0 }).populate('professor_id', '-hash -salt').exec(function(err, data) {
+	Model.find(query, { hash: 0, salt: 0 }).populate('professor', '-hash -salt').exec(function(err, data) {
 		if(err) {
 			console.log('ERROR: ', err);
 			res.json({ err: true });
@@ -45,7 +47,7 @@ Controller.retrieveById = function (req, res) {
 	var query = { _id: id };
 
 	Model.findOne(query, { hash: 0, salt: 0, institution_id: 0 })
-							 .populate('professor_id submissions.student_id', '-salt -hash')
+							 .populate('professor submissions.student', '-salt -hash')
 							 .exec(function (err, data) {
 		if(err) {
 			console.log('ERROR: ', err);
@@ -72,7 +74,7 @@ Controller.submitById = function (req, res) {
 			if(!data || !req.session.user.quizzesTime[id]) res.json({ err: true });
 
 			data.submissions.push({
-				student_id: new ObjectID(req.session.user._id),
+				student: new ObjectId(req.session.user._id),
 				answers: submission,
 				time_spent: Date.now() - req.session.user.quizzesTime[id]
 			});

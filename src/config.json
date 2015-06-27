@@ -1,6 +1,6 @@
 {
 	"environment": "development",
-	"dbURI": "mongodb://localhost/fisika"
+	"dbURI": "mongodb://localhost/pope"
 
 
 }

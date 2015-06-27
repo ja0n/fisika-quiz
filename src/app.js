@@ -7,10 +7,10 @@ var express = require('express')
   , db = require('./scripts/db')(config.dbURI)
   , pwd = require('./scripts/pwd')
   , utils = require('./scripts/utils')
-  , ObjectID = require('mongodb').ObjectID
+  , ObjectId = require('mongoose').Schema.Types.ObjectId
   ;
 
-global.ObjectID = ObjectID;
+global.ObjectId = ObjectId;
 
 var app = express();
 
@@ -38,7 +38,7 @@ app.use('/api/*', function(req, res, next) {
     res.json({ err: 'login!!!' });
   }
   var collection = db.collection('users');
-  var query = { '_id': new ObjectID(req.session.user._id) };
+  var query = { '_id': new ObjectId(req.session.user._id) };
 
   collection.findOne(query, function(err, user) {
     if (err) throw err;
@@ -55,7 +55,7 @@ app.use('/api/*', function(req, res, next) {
 });
 
 app.post('/api/(|professors|students)', function(req, res, next) {
-  //if (req.session.user.role != 'admin') res.json({ err: true, msg: 'You Shall Not Pass!!!'});
+  if (req.session.user.role != 'admin') return res.json({ err: true, msg: 'You Shall Not Pass!!!'});
   if (!req.body.password) res.json({ err: true, msg: 'password required!' });
   else {
     pwd.hash(req.body.password, function(err, salt, hash) {
@@ -69,6 +69,9 @@ app.post('/api/(|professors|students)', function(req, res, next) {
 });
 
 app.put('/api/(|parents|professors|students|institutions)/:id', function(req, res, next) {
+  if (req.session.user.role != 'admin' && req.session.user._id != req.params.id)
+    return res.json({ err: true, msg: 'You Shall Not Pass!!!'});
+
   if (!req.body.password) next();
   else {
     pwd.hash(req.body.password, function(err, salt, hash) {
