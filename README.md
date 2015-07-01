@@ -3,7 +3,7 @@ POPE
 
 Platform for Online Problems and Exercises
 
-## Requiriments
+## Requirements
 
   - MongoDB
   - nodejs
@@ -11,6 +11,7 @@ Platform for Online Problems and Exercises
 
 ## Instructions
 
-Just clone the repo, set the db name in src/config.json and
-    npm install
-		npm start
+Just clone the repo, set the db name in src/config.json nor port and
+
+  	npm install
+	npm start
