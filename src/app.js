@@ -10,9 +10,9 @@ var express = require('express')
   , ObjectId = require('mongoose').Schema.Types.ObjectId
   ;
 
-global.ObjectId = ObjectId;
-
 var app = express();
+
+app.set('port', config.port || 3000);
 
 /*
  * Static, cookie session, post's body, CORS
@@ -32,7 +32,9 @@ app.use('/api/*', function(req, res, next) {
     res.json({ err: 'You Shall Not Pass!!!'});
   }
 
-  return //daqui pra tem q ajeitar
+  return null;
+  // below code verifies is the incoming requisition has a valid session
+  // but its broken. gotta fix it xD
   if(!req.session.user._id) {
     res.status(401);
     res.json({ err: 'login!!!' });
@@ -55,8 +57,10 @@ app.use('/api/*', function(req, res, next) {
 });
 
 app.post('/api/(|professors|students)', function(req, res, next) {
-  if (req.session.user.role != 'admin') return res.json({ err: true, msg: 'You Shall Not Pass!!!'});
-  if (!req.body.password) res.json({ err: true, msg: 'password required!' });
+  if (req.session.user.role != 'admin')
+    return res.json({ err: true, msg: 'You Shall Not Pass!!!'});
+  if (!req.body.password)
+    res.json({ err: true, msg: 'password required!' });
   else {
     pwd.hash(req.body.password, function(err, salt, hash) {
       if (err) throw err;
@@ -68,11 +72,12 @@ app.post('/api/(|professors|students)', function(req, res, next) {
   }
 });
 
-app.put('/api/(|parents|professors|students|institutions)/:id', function(req, res, next) {
+app.put('/api/(|professors|students)/:id', function(req, res, next) {
   if (req.session.user.role != 'admin' && req.session.user._id != req.params.id)
     return res.json({ err: true, msg: 'You Shall Not Pass!!!'});
 
-  if (!req.body.password) next();
+  if (!req.body.password)
+    next();
   else {
     pwd.hash(req.body.password, function(err, salt, hash) {
       if (err) throw err;
@@ -83,19 +88,22 @@ app.put('/api/(|parents|professors|students|institutions)/:id', function(req, re
   }
 });
 
-app.all('/api/*', function(req, res, next) {
-  return next();
-  if (req.session.user) next();
-  else {
-    res.status(401);
-    res.json({ err: 'You Shall Not Pass!!!'});
-  }
-});
+
+// useless due to above app.use('/api/*', ...
+// app.all('/api/*', function(req, res, next) {
+//   return next();
+//   if (req.session.user) next();
+//   else {
+//     res.status(401);
+//     res.json({ err: 'You Shall Not Pass!!!'});
+//   }
+// });
 
 app.all('/login', function(req, res) {
   var cred = req.body.email ? req.body : req.query;
   utils.authenticate(cred.email, cred.password, db, function(err, user) {
-    if (err) res.send({ err: true });
+    if (err)
+      res.send({ err: true });
     if (user) {
       delete user.hash; delete user.salt;
       req.session.user = user;

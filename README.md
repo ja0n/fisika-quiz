@@ -11,7 +11,7 @@ Platform for Online Problems and Exercises
 
 ## Instructions
 
-Just clone the repo, set the db name in src/config.json nor port and
+Just clone the repo, set the db name nor port in src/config.json and
 
   	npm install
 	npm start

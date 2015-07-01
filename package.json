@@ -1,7 +1,7 @@
 {
-  "name": "agua-ja-api",
-  "version": "1.0.0",
-  "description": "Edoo's API.",
+  "name": "pope-api",
+  "version": "0.0.1",
+  "description": "POPE's API.",
   "main": "app.js",
   "private": true,
   "scripts": {
