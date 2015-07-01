@@ -6,7 +6,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 Controller.create = function (req, res) {
 	var data = req.body;
-	data['professor'] = new ObjectId(req.session.user._id);
+	data.professor = new ObjectId(req.session.user._id);
 
 	var model = new Model(data);
 
@@ -30,7 +30,6 @@ Controller.retrieveAll = function (req, res) {
 };
 
 Controller.removeAll = function(req, res) {
-	var req_institution_id = req.session.user._id || req.session.user.institution_id;
 	var query = { institution_id: req_institution_id };
 
 	Model.remove(query, function(err, data) {
@@ -43,10 +42,9 @@ Controller.removeAll = function(req, res) {
 
 Controller.retrieveById = function (req, res) {
 	var id = req.params.id;
-	var req_institution_id = req.session.user._id || req.session.user.institution_id;
 	var query = { _id: id };
 
-	Model.findOne(query, { hash: 0, salt: 0, institution_id: 0 })
+	Model.findOne(query, { hash: 0, salt: 0 })
 							 .populate('professor submissions.student', '-salt -hash')
 							 .exec(function (err, data) {
 		if(err) {
@@ -63,7 +61,7 @@ Controller.retrieveById = function (req, res) {
 Controller.submitById = function (req, res) {
 	var id = req.params.id;
 	var submission = req.body.submission;
-	var req_institution_id = req.session.user._id || req.session.user.institution_id;
+
 	var query = { _id: id };
 
 	Model.findOne(query, function (err, data) {
@@ -84,19 +82,15 @@ Controller.submitById = function (req, res) {
 				if(err) res.json({ err: err });
 				else    res.json({ success: true });
 			});
-			// Model.update(query, { $set: { submissions: data.submissions }}, { upsert: true });
-			//res.json({ err: false, success: true });
-
 		}
 	});
 };
 
 Controller.modifyById = function (req, res) {
 	var id = req.params.id;
-	var req_institution_id = req.session.user._id || req.session.user.institution_id;
 	var query = { _id: id };
 
-	Model.findOneAndUpdate(query, req.body, { select: { hash: 0, salt: 0, institution_id: 0 } }, function(err, data) {
+	Model.findOneAndUpdate(query, req.body, { select: { hash: 0, salt: 0 } }, function(err, data) {
 		if(err) {
 			console.log('ERROR: ', err);
 			res.json({ err: true });
@@ -106,10 +100,9 @@ Controller.modifyById = function (req, res) {
 
 Controller.removeById = function (req, res) {
 	var id = req.params.id;
-	var req_institution_id = req.session.user._id || req.session.user.institution_id;
 	var query = { _id: id };
 
-	Model.findOneAndRemove(query, { select: { hash: 0, salt: 0, institution_id: 0 } }, function (err, data) {
+	Model.findOneAndRemove(query, { select: { hash: 0, salt: 0 } }, function (err, data) {
 		if(err) {
 			console.log('ERROR: ', err);
 			res.json({ err: true });

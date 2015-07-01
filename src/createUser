@@ -1,12 +1,23 @@
 #!/usr/bin/env node
 // Usage: createUser <name> <role> <email> <password>
 var utils = require('./scripts/utils');
+var roles = ['admin', 'student', 'professor'];
 
 console.log("Usage: createUser <name> <role> <email> <password> \n");
+console.log("Roles availables:");
 
-utils.createUser(
-{ name: process.argv[2]
-, role: process.argv[3]
-, email: process.argv[4]
-, password: process.argv[5]
-});
+for (var i = 0; i < roles.length; i++)
+	console.log(i + ': ' + roles[i]);
+
+console.log('');
+
+if(roles[process.argv[3]] !== undefined) {
+	utils.createUser({
+		name: process.argv[2]
+	, role: process.argv[3]
+	, email: process.argv[4]
+	, password: process.argv[5]
+	});
+} else {
+	console.log('ERROR: Bad input');
+}
