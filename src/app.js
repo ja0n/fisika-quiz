@@ -33,7 +33,7 @@ app.use('/api/*', function(req, res, next) {
   }
 
   return null;
-  // below code verifies is the incoming requisition has a valid session
+  // below code verifies if the incoming requisition has a valid session
   // but its broken. gotta fix it xD
   if(!req.session.user._id) {
     res.status(401);

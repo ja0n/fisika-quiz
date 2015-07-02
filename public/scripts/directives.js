@@ -198,7 +198,8 @@ function() {
 							return $element.addClass("body-tasks")
 					}
 				}, addBg($location.path()), $scope.$watch(path, function(newVal, oldVal) {
-					return newVal !== oldVal ? addBg($location.path()) : void 0
+					return addBg($location.path());
+					// return newVal !== oldVal ? addBg($location.path()) : void 0
 				})
 			}]
 		}

@@ -1,4 +1,3 @@
-var debug;
 ;(function(angular) {
   "use strict";
 
@@ -7,8 +6,6 @@ var debug;
   //! Authentication service
   factory("auth", function($rootScope, $http, $location, logger) {
     var user = sessionStorage.sessionData ? JSON.parse(sessionStorage.sessionData) : null
-    debug = user;
-    if(!user) goToLogin('Precisa estar logado!');
 
     function load() {
       if($location.path() == '/login') return null;

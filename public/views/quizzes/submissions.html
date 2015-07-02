@@ -15,7 +15,7 @@
                     <tbody>
                         <tr ng-repeat="data in quizz.submissions track by $index">
                             <td>{{$index + 1}}</td>
-                            <td>{{data.student_id.name}}</td>
+                            <td>{{data.student.name}}</td>
                             <td>{{data.time_spent}}ms</td>
                             <td>
                               <button class="btn btn-primary" ng-click="openModal(data)">Ver Submissão</button>

@@ -4,8 +4,8 @@
 	.controller('AppCtrl', function($scope, $location, $http, logger, auth) {
 		$scope.auth = auth;
 		$scope.main = {
-			brand: 'Fisika',
-			name: 'Jaon Boe'
+			brand: 'POPE',
+			description: 'Platform for Online Problems and Exercises'
 		}
 		$scope.indexChar = function (index) {
 	    return String.fromCharCode(65 + index);
@@ -66,7 +66,6 @@
 		};
 
 		$scope.addAlt = function(alternatives, scope) {
-			console.log(alternatives);
 			var newAlt = scope.newAlt.trim();
 			0 !== newAlt.length ? (alternatives.push({ description: newAlt, correct: !1 }),
 			logger.logSuccess('Alternativa adicionada'), scope.newAlt = '') : void 0
@@ -87,12 +86,12 @@
 		$scope.clearCompleted = function() {
 			return $scope.tasks = tasks = tasks.filter(function(val) {
 				return !val.correct
-			}), taskStorage.put(tasks)
+			})
 		}
 		$scope.markAll = function(correct) {
 			return tasks.forEach(function(task) {
 				return task.correct = correct
-			}), $scope.remainingCount = correct ? 0 : tasks.length, taskStorage.put(tasks), correct ? logger.logSuccess('Congrats! All done :)') : void 0
+			}), $scope.remainingCount = correct ? 0 : tasks.length, correct ? logger.logSuccess('Congrats! All done :)') : void 0
 		}
 
 		$scope.showInfoOnSubmit = !1, original = angular.copy($scope.quizz);
@@ -124,7 +123,6 @@
 
 		var url = 'http://' + location.hostname + ':3000/api/quizzes/' + id;
 		$http.get(url).success(function(data) {
-			console.log(data);
 			if(data.err) {
 				logger.logWarning('Ocorreu algum problema.');
 				$location.path('/quizzes');
@@ -151,7 +149,6 @@
 			return $scope.answers.indexOf(null) == -1
 		}
 		$scope.submitForm = function() {
-			// return console.log($scope.answers)
 	    $http.post(url, { submission: $scope.answers}).success(function(data) {
 	      $location.path('/quizzes');
 	    	$scope.revert()
@@ -168,7 +165,6 @@
 
 		var url = 'http://' + location.hostname + ':3000/api/quizzes/' + id;
 		$http.get(url).success(function(data) {
-			console.log(data);
 			if(data.err) {
 				logger.logWarning('Ocorreu algum problema.');
 				$location.path('/quizzes');
@@ -184,7 +180,7 @@
     modalInstance = $modal.open({
       templateUrl: "submissionModal.html",
       controller: function($scope, $rootScope, $modalInstance, questions) {
-        $scope.name = submission.student_id.name;
+        $scope.name = submission.student.name;
         $scope.answers = submission.answers;
 				$scope.questions = questions;
 
@@ -380,14 +376,9 @@
 			$scope.viewData = data;
 		});
 	})
-	.controller('NavCtrl', ['$scope', 'taskStorage', 'filterFilter', function($scope, taskStorage, filterFilter) {
-		var tasks;
-		return tasks = $scope.tasks = taskStorage.get(), $scope.taskRemainingCount = filterFilter(tasks, {
-			completed: !1
-		}).length, $scope.$on('taskRemaining:changed', function(event, count) {
-			return $scope.taskRemainingCount = count
-		})
-	}])
+	.controller('NavCtrl', function($scope, filterFilter) {
+		return null;
+	})
 	.controller('DashboardCtrl', ['$scope', function($scope) {
 		return $scope.comboChartData = [
 			['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],

@@ -1,6 +1,6 @@
 ;(function() {
 	'use strict';
-	angular.module('app', ['ngRoute','app.form.validation', 'ngAnimate', 'ui.bootstrap', 'auth.service', 'easypiechart', 'mgo-angular-wizard', 'app.ui.services', 'app.controllers', 'app.directives', 'app.ui.form.directives', 'app.task', 'app.localization', 'app.chart.directives'])
+	angular.module('app', ['ngRoute','app.form.validation', 'ngAnimate', 'ui.bootstrap', 'auth.service', 'easypiechart', 'mgo-angular-wizard', 'app.ui.services', 'app.controllers', 'app.directives', 'app.ui.form.directives', 'app.localization', 'app.chart.directives'])
 	.config(['$routeProvider', function($routeProvider) {
 		return $routeProvider.when('/', {
 			redirectTo: '/dashboard'
@@ -55,8 +55,6 @@
 			templateUrl: 'views/pages/404.html'
 		}).when('/pages/500', {
 			templateUrl: 'views/pages/500.html'
-		}).when('/tasks', {
-			templateUrl: 'views/tasks/tasks.html'
 		}).otherwise({
 			redirectTo: '/404'
 		})
