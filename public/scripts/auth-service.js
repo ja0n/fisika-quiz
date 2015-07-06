@@ -36,14 +36,14 @@
 
     function goToLogin(msg) {
       $location.path('/login');
-      logger.logWarning(msg);
+      //logger.logWarning(msg);
       return null;
     }
 
     // Perform the logout.
     function perform_logout(cb) {
       // var url = "http://edoo.dev/logout", status;
-      var url = "http://localhost:3000/logout", status;
+      var url = 'http://'+ location.hostname +':3000/logout', status;
 
       $http.get(url).success(function(data) {
         user = null; sessionStorage.removeItem('sessionData');

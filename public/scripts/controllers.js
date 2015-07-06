@@ -2,7 +2,6 @@
 	'use strict';
 	angular.module('app.controllers', [])
 	.controller('AppCtrl', function($scope, $location, $http, logger, auth) {
-		$scope.auth = auth;
 		$scope.main = {
 			brand: 'POPE',
 			description: 'Platform for Online Problems and Exercises'
