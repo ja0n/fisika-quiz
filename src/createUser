@@ -14,7 +14,7 @@ console.log('');
 if(roles[process.argv[3]] !== undefined) {
 	utils.createUser({
 		name: process.argv[2]
-	, role: process.argv[3]
+	, role: roles[process.argv[3]]
 	, email: process.argv[4]
 	, password: process.argv[5]
 	});
