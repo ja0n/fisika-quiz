@@ -14,8 +14,7 @@
 
     // Perform the login.
     function perform_login(user, cb) {
-      //var url = "http://edoo.dev/login", status;
-      var url = "http://localhost:3000/login", status;
+      var url = 'http://'+ location.hostname +':3000/logout', status;
 
       $http.post(url, user).success(function(data) {
         if (data.success) {
