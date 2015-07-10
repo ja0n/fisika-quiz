@@ -1,8 +1,7 @@
 "use strict"
 var express = require('express')
   , bodyParser = require('body-parser')
-  , cookieParser = require('cookie-parser')
-  , session = require('cookie-session')
+  , session = require('express-session')
   , config = require('./config')
   , db = require('./scripts/db')(config.dbURI)
   , pwd = require('./scripts/pwd')
@@ -11,18 +10,18 @@ var express = require('express')
   ;
 
 var app = express();
-
-app.set('port', config.port || 3000);
-
+// var RedisStore = require('connect-redis')(session);
 /*
- * Static, cookie session, post's body, CORS
+ * Port, settings, Static, session, post body, CORS
  */
-app.use(express.static(__dirname + '/../public'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(cookieParser('secret'));
-app.use(session({ secret: 'secret' }));
-app.use(utils.cors);
+app.set('port', config.port || 3000)
+   .enable('trust proxy')
+   .use(express.static(__dirname + '/../public'))
+   .use(bodyParser.urlencoded({ extended: false }))
+   .use(bodyParser.json())
+   .use(session({ secret: 'qwertyu123', resave: false, saveUninitialized: false }))
+   .use(utils.cors)
+   ;
 
 app.use('/api/*', function(req, res, next) {
   delete req.body.hash; delete req.body.salt;

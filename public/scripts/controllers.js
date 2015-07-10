@@ -1,4 +1,5 @@
 ;(function() {
+	var rootUrl = 'http://' + location.host;
 	'use strict';
 	angular.module('app.controllers', [])
 	.controller('AppCtrl', function($scope, $location, $http, logger, auth) {
@@ -38,7 +39,7 @@
 		}
 
 		$scope.deleteById = function (path, list, index, id) {
-			var url = 'http://' + location.hostname + ':3000/api/' + path + '/' + id;
+			var url = rootUrl + '/api/' + path + '/' + id;
 			$http.delete(url).success(function(data) {
 				list.splice(index, 1);
 				logger.logSuccess('Operação realizada com sucesso.');
@@ -105,7 +106,7 @@
 			return !angular.equals($scope.quizz, original)
 		}
 		$scope.submitForm = function() {
-			var url = 'http://' + location.hostname + ':3000/api/quizzes';
+			var url = rootUrl + '/api/quizzes';
 	    $http.post(url, $scope.quizz).success(function(data) {
 	      $location.path('/quizzes');
 	    	$scope.revert()
@@ -120,7 +121,7 @@
 		var id = $routeParams.id; $scope.answers = [];
 		var original;
 
-		var url = 'http://' + location.hostname + ':3000/api/quizzes/' + id;
+		var url = rootUrl + '/api/quizzes/' + id;
 		$http.get(url).success(function(data) {
 			if(data.err) {
 				logger.logWarning('Ocorreu algum problema.');
@@ -162,7 +163,7 @@
 		var id = $routeParams.id; $scope.answers = [];
 		var original;
 
-		var url = 'http://' + location.hostname + ':3000/api/quizzes/' + id;
+		var url = rootUrl + '/api/quizzes/' + id;
 		$http.get(url).success(function(data) {
 			if(data.err) {
 				logger.logWarning('Ocorreu algum problema.');
@@ -208,7 +209,7 @@
 
 	})
 	.controller('ViewQuizzesCtrl', function($scope, $http, $location, logger) {
-		var url = 'http://' + location.hostname + ':3000/api/quizzes';
+		var url = rootUrl + '/api/quizzes';
 		$http.get(url).success(function(data) {
 			$scope.viewData = data;
 		});
@@ -238,7 +239,7 @@
 			return $scope.client_form.$valid && !angular.equals($scope.client, original)
 		}
 		$scope.submitForm = function() {
-			var url = 'http://' + location.hostname + ':3000/api/students';
+			var url = rootUrl + '/api/students';
 	    $http.post(url, $scope.client).success(function(data) {
 	      if (data.err) return logger.logError('Ocorreu algum problema.');
 	      else {
@@ -256,7 +257,7 @@
 		var id = $routeParams.id;
 		var original;
 
-		var url = 'http://' + location.hostname + ':3000/api/students/' + id;
+		var url = rootUrl + '/api/students/' + id;
 		$http.get(url).success(function(data) {
 			if(data.err) {
 				logger.logWarning('Ocorreu algum problema.');
@@ -292,13 +293,13 @@
 		}
 	})
 	.controller('ViewStudentsCtrl', function($scope, $http, $location, logger) {
-		var url = 'http://' + location.hostname + ':3000/api/students';
+		var url = rootUrl + '/api/students';
 		$http.get(url).success(function(data) {
 			$scope.viewData = data;
 		});
 	})
 	.controller('CreateProfessorCtrl', function($scope, $http, $location, logger) {
-		var url = 'http://' + location.hostname + ':3000/api/professors';
+		var url = rootUrl + '/api/professors';
 		$http.get(url).success(function(data) {
 			$scope.selectData = data;
 		});
@@ -319,7 +320,7 @@
 			return $scope.professor_form.$valid && !angular.equals($scope.professor, original)
 		}
 		$scope.submitForm = function() {
-			var url = 'http://' + location.hostname + ':3000/api/professors';
+			var url = rootUrl + '/api/professors';
 	    $http.post(url, $scope.professor).success(function(data) {
 	      $location.path('/professors');
 	    	$scope.revert()
@@ -334,7 +335,7 @@
 		var id = $routeParams.id;
 		var original;
 
-		var url = 'http://' + location.hostname + ':3000/api/professors/' + id;
+		var url = rootUrl + '/api/professors/' + id;
 		$http.get(url).success(function(data) {
 			if(data.err) {
 				logger.logWarning('Ocorreu algum problema.');
@@ -370,7 +371,7 @@
 		}
 	})
 	.controller('ViewProfessorsCtrl', function($scope, $http, $location, logger) {
-		var url = 'http://' + location.hostname + ':3000/api/professors';
+		var url = rootUrl + '/api/professors';
 		$http.get(url).success(function(data) {
 			$scope.viewData = data;
 		});
