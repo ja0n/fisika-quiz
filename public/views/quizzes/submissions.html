@@ -33,7 +33,7 @@
         <h3>Submissão de {{name}}</h3>
     </div>
     <div class="modal-body">
-        <span ng-repeat="answer in answers" class="list-unstyled">
+        <span ng-repeat="answer in answers track by $index" class="list-unstyled">
             <label class="ui-radio">
                 <input type="checkbox" ng-checked="answer === questions[$index].answer" disabled>
                 <span>
