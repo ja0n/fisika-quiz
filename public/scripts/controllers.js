@@ -1,19 +1,25 @@
+var rootUrl = 'http://' + location.host;
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var rootUrl = 'http://' + location.host;
 ;(function() {
-	var rootUrl = 'http://' + location.host;
 	'use strict';
 	angular.module('app.controllers', [])
 	.controller('AppCtrl', function($scope, $location, $http, logger, auth) {
+
 		$scope.main = {
 			brand: 'POPE',
 			description: 'Platform for Online Problems and Exercises'
-		}
+		};
+
 		$scope.indexChar = function (index) {
 	    return String.fromCharCode(65 + index);
 		};
+
 		$scope.isSpecificPage = function() {
 			var path;
-			return path = $location.path(), _.contains(['/404', '/pages/500', '/login', '/pages/signin', '/pages/signin1', '/pages/signin2', '/pages/signup', '/pages/signup1', '/pages/signup2'], path)
-		}
+			return path = $location.path(), _.contains(['/404', '/pages/500', '/login', '/pages/signin', '/pages/signin1', '/pages/signin2', '/pages/signup', '/pages/signup1', '/pages/signup2'], path);
+		};
+
 		$scope.submitLogin = function(user) {
 			if(user.email && user.password) {
 				auth.login(user, function(status) {
@@ -24,19 +30,19 @@
 						$location.path('/dashboard');
 					}
 				});
-			} else logger.logWarning('Precisa preencher os campos.')
-		}
+			} else logger.logWarning('Precisa preencher os campos.');
+		};
 
 		$scope.logout = function() {
 			auth.logout(function(status) {
 				if(status.err) {
 					logger.logDanger(status.msg);
 				} else {
-					logger.logSuccess(status.msg)
-					$location.path('/login')
+					logger.logSuccess(status.msg);
+					$location.path('/login');
 				}
 			});
-		}
+		};
 
 		$scope.deleteById = function (path, list, index, id) {
 			var url = rootUrl + '/api/' + path + '/' + id;
@@ -47,8 +53,104 @@
 				logger.logWarning('Ocorreu algum problema.');
 			});
 		};
-		return $scope.auth = auth, $scope.deleteById
+		return $scope.auth = auth, $scope.deleteById;
 	})
+	.controller('NavCtrl', function($scope, filterFilter) {
+		return null;
+	})
+	.controller('DashboardCtrl', ['$scope', function($scope) {
+		return;
+	}])
+}).call(this)
+
+},{}],2:[function(require,module,exports){
+;(function() {
+	'use strict';
+	angular.module('app.controllers')
+	.controller('CreateProfessorCtrl', function($scope, $http, $location, logger) {
+		var url = rootUrl + '/api/professors';
+		$http.get(url).success(function(data) {
+			$scope.selectData = data;
+		});
+		var original;
+		$scope.professor = {
+			name: '',
+			email: '',
+			password: '',
+		}
+		$scope.showInfoOnSubmit = !1, original = angular.copy($scope.professor);
+		$scope.revert = function() {
+			return $scope.professor = angular.copy(original), $scope.professor_form.$setPristine()
+		}
+		$scope.canRevert = function() {
+			return !angular.equals($scope.professor, original) || !$scope.professor_form.$pristine
+		}
+		$scope.canSubmit = function() {
+			return $scope.professor_form.$valid && !angular.equals($scope.professor, original)
+		}
+		$scope.submitForm = function() {
+			var url = rootUrl + '/api/professors';
+	    $http.post(url, $scope.professor).success(function(data) {
+	      $location.path('/professors');
+	    	$scope.revert()
+	      return logger.logSuccess('Operação realizada com sucesso.');
+
+	    }).error(function(data) {
+	      logger.logError('Ocorreu algum problema.');
+	    });
+		}
+	})
+	.controller('EditProfessorCtrl', function($scope, $http, $routeParams, $location, logger) {
+		var id = $routeParams.id;
+		var original;
+
+		var url = rootUrl + '/api/professors/' + id;
+		$http.get(url).success(function(data) {
+			if(data.err) {
+				logger.logWarning('Ocorreu algum problema.');
+				$location.path('/professors');
+			}
+			$scope.professor = data;
+			$scope.showInfoOnSubmit = !1, original = angular.copy($scope.professor);
+		}).error(function(data) {
+			logger.logWarning('Ocorreu algum problema.');
+			$location.path('/professors');
+		});
+
+		$scope.revert = function() {
+			return $scope.professor = angular.copy(original), $scope.professor_form.$setPristine()
+		}
+		$scope.canRevert = function() {
+			return !angular.equals($scope.professor, original) || !$scope.professor_form.$pristine
+		}
+		$scope.canSubmit = function() {
+			return $scope.professor_form.$valid && !angular.equals($scope.professor, original)
+		}
+		$scope.submitForm = function() {
+	    $http.put(url, $scope.professor).success(function(data) {
+	      if (data.err) return logger.logError('Ocorreu algum problema.');
+	      else {
+					logger.logSuccess('Operação realizada com sucesso.');
+					$location.path('/professors');
+					$scope.revert();
+				}
+	    }).error(function(data) {
+	      logger.logError('Ocorreu algum problema.');
+	    });
+		}
+	})
+	.controller('ViewProfessorsCtrl', function($scope, $http, $location, logger) {
+		var url = rootUrl + '/api/professors';
+		$http.get(url).success(function(data) {
+			$scope.viewData = data;
+		});
+	})
+}).call(this)
+
+},{}],3:[function(require,module,exports){
+;(function() {
+	'use strict';
+	angular.module('app.controllers')
 	.controller('CreateQuizCtrl', function($scope, $http, $location, $modal, logger) {
 		var original;
 
@@ -62,37 +164,41 @@
 			$scope.quizz.questions.push({ title: 'Questão ' + ($scope.quizz.questions.length+1),
 													description: 'Insira o enunciado aqui',
 													alternatives: [],
-													active: true })
+													active: true });
 		};
 
 		$scope.addAlt = function(alternatives, scope) {
 			var newAlt = scope.newAlt.trim();
 			0 !== newAlt.length ? (alternatives.push({ description: newAlt, correct: !1 }),
-			logger.logSuccess('Alternativa adicionada'), scope.newAlt = '') : void 0
-		}
+			logger.logSuccess('Alternativa adicionada'), scope.newAlt = '') : void 0;
+		};
+
 		$scope.edit = function(task) {
 			return $scope.editedTask = task
-		}
+		};
+
 		$scope.doneEditing = function(alt, index, e) {
 			$scope.editedTask = null;
 			alt.description = alt.description.trim();
 			alt.description ? logger.log('Alternativa atualizada') : $scope.remove(alt)
-		}
+		};
+
 		$scope.remove = function(task, tasks) {
 			var index = tasks.indexOf(task);
 			tasks.splice(index, 1);
 			logger.logError('Alternativa removida');
-		}
+		};
+
 		$scope.clearCompleted = function() {
 			return $scope.tasks = tasks = tasks.filter(function(val) {
-				return !val.correct
-			})
-		}
+				return !val.correct;
+			});
+		};
 		$scope.markAll = function(correct) {
 			return tasks.forEach(function(task) {
-				return task.correct = correct
-			}), $scope.remainingCount = correct ? 0 : tasks.length, correct ? logger.logSuccess('Congrats! All done :)') : void 0
-		}
+				return task.correct = correct;
+			}), $scope.remainingCount = correct ? 0 : tasks.length, correct ? logger.logSuccess('Congrats! All done :)') : void 0;
+		};
 
 		$scope.showInfoOnSubmit = !1, original = angular.copy($scope.quizz);
 
@@ -215,6 +321,12 @@
 		});
 
 	})
+}).call(this)
+
+},{}],4:[function(require,module,exports){
+;(function() {
+	'use strict';
+	angular.module('app.controllers')
 	.controller('CreateStudentCtrl', function($scope, $http, $location, logger) {
 		var marker;
 
@@ -298,101 +410,6 @@
 			$scope.viewData = data;
 		});
 	})
-	.controller('CreateProfessorCtrl', function($scope, $http, $location, logger) {
-		var url = rootUrl + '/api/professors';
-		$http.get(url).success(function(data) {
-			$scope.selectData = data;
-		});
-		var original;
-		$scope.professor = {
-			name: '',
-			email: '',
-			password: '',
-		}
-		$scope.showInfoOnSubmit = !1, original = angular.copy($scope.professor);
-		$scope.revert = function() {
-			return $scope.professor = angular.copy(original), $scope.professor_form.$setPristine()
-		}
-		$scope.canRevert = function() {
-			return !angular.equals($scope.professor, original) || !$scope.professor_form.$pristine
-		}
-		$scope.canSubmit = function() {
-			return $scope.professor_form.$valid && !angular.equals($scope.professor, original)
-		}
-		$scope.submitForm = function() {
-			var url = rootUrl + '/api/professors';
-	    $http.post(url, $scope.professor).success(function(data) {
-	      $location.path('/professors');
-	    	$scope.revert()
-	      return logger.logSuccess('Operação realizada com sucesso.');
-
-	    }).error(function(data) {
-	      logger.logError('Ocorreu algum problema.');
-	    });
-		}
-	})
-	.controller('EditProfessorCtrl', function($scope, $http, $routeParams, $location, logger) {
-		var id = $routeParams.id;
-		var original;
-
-		var url = rootUrl + '/api/professors/' + id;
-		$http.get(url).success(function(data) {
-			if(data.err) {
-				logger.logWarning('Ocorreu algum problema.');
-				$location.path('/professors');
-			}
-			$scope.professor = data;
-			$scope.showInfoOnSubmit = !1, original = angular.copy($scope.professor);
-		}).error(function(data) {
-			logger.logWarning('Ocorreu algum problema.');
-			$location.path('/professors');
-		});
-
-		$scope.revert = function() {
-			return $scope.professor = angular.copy(original), $scope.professor_form.$setPristine()
-		}
-		$scope.canRevert = function() {
-			return !angular.equals($scope.professor, original) || !$scope.professor_form.$pristine
-		}
-		$scope.canSubmit = function() {
-			return $scope.professor_form.$valid && !angular.equals($scope.professor, original)
-		}
-		$scope.submitForm = function() {
-	    $http.put(url, $scope.professor).success(function(data) {
-	      if (data.err) return logger.logError('Ocorreu algum problema.');
-	      else {
-					logger.logSuccess('Operação realizada com sucesso.');
-					$location.path('/professors');
-					$scope.revert();
-				}
-	    }).error(function(data) {
-	      logger.logError('Ocorreu algum problema.');
-	    });
-		}
-	})
-	.controller('ViewProfessorsCtrl', function($scope, $http, $location, logger) {
-		var url = rootUrl + '/api/professors';
-		$http.get(url).success(function(data) {
-			$scope.viewData = data;
-		});
-	})
-	.controller('NavCtrl', function($scope, filterFilter) {
-		return null;
-	})
-	.controller('DashboardCtrl', ['$scope', function($scope) {
-		return $scope.comboChartData = [
-			['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
-			['2014/05', 165, 938, 522, 998, 450, 614.6],
-			['2014/06', 135, 1120, 599, 1268, 288, 682],
-			['2014/07', 157, 1167, 587, 807, 397, 623],
-			['2014/08', 139, 1110, 615, 968, 215, 609.4],
-			['2014/09', 136, 691, 629, 1026, 366, 569.6]
-		], $scope.salesData = [
-			['Year', 'Sales', 'Expenses'],
-			['2010', 1e3, 400],
-			['2011', 1170, 460],
-			['2012', 660, 1120],
-			['2013', 1030, 540]
-		]
-	}])
 }).call(this)
+
+},{}]},{},[1,2,3,4]);

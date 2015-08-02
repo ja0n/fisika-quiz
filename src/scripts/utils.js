@@ -40,7 +40,8 @@ module.exports = {
       data.hash = hash.toString();
       collection.insert(data, function(err, data) {
         if(err) console.log('Error: ', err);
-        else console.log('Success: ', data);
+        else console.log('Success: ', data.ops);
+        return;
       });
     });
   },

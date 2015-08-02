@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "bundle-controllers": "browserify public/scripts/controllers/*.js -o public/scripts/controllers.js",
     "start": "node ./bin/www"
   },
   "author": "ja0n",
