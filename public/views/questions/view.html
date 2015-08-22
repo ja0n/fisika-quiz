@@ -1,0 +1,48 @@
+<div class="page">
+    <section class="panel panel-default">
+        <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Lugares</strong></div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nome</th>
+                            <th>Criador</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="data in viewData">
+                            <td>{{$index + 1}}</td>
+                            <td>{{data.title}}</td>
+                            <td>{{data.created_by.name}}</td>
+                            <td>
+                              <a ng-click="previewQuestion(data._id)"
+                                 class="btn btn-w-md btn-gap-v btn-info">Visualizar</a>
+                              <a data-ng-if="auth.user.role !== 'student'"
+                                 href="#/quizzes/submissions/{{data._id}}" class="btn btn-w-md btn-gap-v btn-info">Ver Submissões</a>
+                              <a data-ng-if="data.professor._id == auth.user._id || auth.user.role == 'admin'"
+                                 href="#/questions/edit/{{data._id}}"class="btn btn-w-md btn-gap-v btn-warning">Editar</a>
+                              <a data-ng-if="data.professor._id == auth.user._id || auth.user.role == 'admin'"
+                                 ng-click="deleteById('quizzes', viewData, $index, data._id)"
+                                 class="btn btn-w-md btn-gap-v btn-danger">Excluir</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script type="text/ng-template" id="previewModal.html">
+    <div class="modal-header">
+        <h3>{{ title }}</h3>
+    </div>
+    <div class="modal-body" ng-bind-html="description">
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">Fechar</button>
+    </div>
+</script>

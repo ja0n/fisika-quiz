@@ -4,6 +4,7 @@ var path = require('path')
   , express = require('express')
   , pwd = require('./pwd')
   , config = require('../config')
+  , db = require('./db')
   ;
 
 module.exports = {
@@ -30,8 +31,7 @@ module.exports = {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
   },
-  createUser: function(data, db) {
-    if(!db) db = require('./db')(config.dbURI);
+  createUser: function(data) {
     var collection = db.collection('users');
     pwd.hash(data.password, function(err, salt, hash) {
       if (err) throw err;
@@ -45,7 +45,7 @@ module.exports = {
       });
     });
   },
-  authenticate: function (name, pass, db, fn) {
+  authenticate: function (name, pass, fn) {
     //if (!module.parent) console.log('authenticating %s:%s', name, pass);
     var collection = db.collection('users');
 

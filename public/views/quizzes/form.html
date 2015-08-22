@@ -1,111 +1,100 @@
-<div class="page page-tasks">
-        <section class="">
-            <!-- <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Criar Marcação</strong></div>
-            <div class="panel-body"> -->
-            <section>
-                <h3>Criar Lista de Exercícios</h3>
-                <input type="text"
-                       class="edit form-control"
-                       data-ng-trim="false"
-                       data-ng-model="quizz.name"
-                       placeholder="Nome da Lista">
-                <div class="divider"></div>
-                <button class="btn btn-gap btn-info" data-ng-click="addQuestion()">Adicionar Questão</button>
-                <tabset justified="true" class="ui-tab">
-                    <tab ng-repeat="question in quizz.questions" heading="{{question.title}}" active="question.active" disabled="question.disabled">
-                        <ul class="task-list list-unstyled">
-                            <li data-ng-class="{ editing: question == editedQ }">
-                                <span class="view">
-                                    <label data-ng-dblclick="editedQ = question">{{question.description}}</label>
-                                    <span class="glyphicon glyphicon-pencil"
-                                          data-ng-click="editedQ = question"></span>
-                                    <span class="glyphicon glyphicon-remove"
-                                          data-ng-click="remove(question)"
-                                          ></span>
-                                </span>
-                                <form data-ng-submit="editedQ = null">
-                                    <textarea type="text"
-                                           class="edit form-control"
-                                           data-ng-trim="false"
-                                           data-ng-model="question.description"
-                                           data-ng-blur="editedQ = null"
-                                           data-task-focus="question == editedQ"> </textarea>
-                                </form>
-                            </li>
-                        </ul>
-                        <form data-ng-submit="addAlt(question.alternatives, this)" class="add-task">
+<div class="page">
+    <section class="panel panel-default">
+        <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Criar Lista de Exercícios</strong></div>
+        <div class="panel-body">
+            <span ng-bind="position"></span>
+            <form name="quizz_form" role="form" ng-submit="submitForm()">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Nome</label>
                             <input type="text"
-                                   placeholder="Adicionar Alternativa"
-                                   class="form-control"
-                                   data-ng-model="newAlt"
-                                   autofocus>
-                            <a type="submit" class="submit-button" data-ng-click="addAlt(question.alternatives, this)">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </a>
-                        </form><br>
-                        <ul class="task-list list-unstyled">
-                            <li data-ng-repeat="task in question.alternatives"
-                                data-ng-class="{completed: task.completed, editing: task == editedTask}">
-                                <span class="view">
-                                    <input type="radio"
-                                           class="toggle-task"
-                                           name="question{{$parent.$index}}"
-                                           data-ng-model="question.answer"
-                                           data-ng-value="$index">
-                                    <label data-ng-dblclick="edit(task)">{{ indexChar($index) + ') '}}{{task.description}}</label>
-                                    <span class="glyphicon glyphicon-pencil"
-                                          data-ng-click="edit(task)"></span>
-                                    <span class="glyphicon glyphicon-remove"
-                                          data-ng-click="remove(task, question.alternatives, $index)"
-                                          ></span>
-                                </span>
-                                <form data-ng-submit="doneEditing(task, $index, $event)">
-                                    <input type="text"
-                                           class="edit form-control"
-                                           data-ng-trim="false"
-                                           data-ng-model="task.description"
-                                           data-ng-blur="doneEditing(task, $index, $event)"
-                                           data-task-focus="task == editedTask">
-                                </form>
-                            </li>
-                        </ul>
-                    </tab>
-                </tabset>
-            </section>
+                             class="form-control"
+                             id="name"
+                             required
+                             ng-minlength="4"
+                             ng-model="quizz.name">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="password">Descrição</label>
+                          <input type="text"
+                           class="form-control"
+                           id="description"
+                           required
+                           ng-model="quizz.description">
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="panel panel-success">
+                            <div class="panel-heading" style="text-align: center"><strong>Questões Selecionadas</strong></div>
+                            <div class="panel-body">
+                                <input type="text" class="form-control" id="name"><br>
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nome</th>
+                                            <th>Opções</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in questions" ng-if="data.selected">
+                                            <td><input type="checkbox" ng-model="data.selected"></td>
+                                            <td>{{data.title}}</td>
+                                            <td>
+                                              <a ng-click="previewQuestion(data._id)"
+                                                 class="btn btn-w-md btn-gap-v btn-info">Visualizar</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2" style="text-align: center; margin: auto">
+                      <h1> <- </h1>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="panel panel-success">
+                            <div class="panel-heading" style="text-align: center"><strong>Questões Disponíveis</strong></div>
+                            <div class="panel-body">
+                                <input type="text" class="form-control" id="name"><br>
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nome</th>
+                                            <th>Opções</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="data in questions" ng-if="!data.selected">
+                                            <td><input type="checkbox" ng-model="data.selected"></td>
+                                            <td>{{data.title}}</td>
+                                            <td>
+                                              <a ng-click="previewQuestion(data._id)"
+                                                 class="btn btn-w-md btn-gap-v btn-info">Visualizar</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-            <footer class="task-footer">
-                <ul class="list-inline clearfix">
-                    <li class="first-item">
-                        <form data-ng-submit="submitForm()">
-                            <button type="submit"
-                                    class="btn btn-success"
-                                    data-ng-disabled="!canSubmit()"
-                                    >Criar</button>
-                        </form>
-                    </li>
-                    <li class="text-center">
-                        <span>
-                            <strong>{{remainingCount}}</strong>
-                            <span class="text-muted"
-                                  data-ng-pluralize count="remainingCount"
-                                  when="{one: 'item left', other: 'items left'}"></span>
-                        </span>
-                    </li>
-                    <li class="text-right">
-                        <span class="clear-completed"
-                              data-ng-click="clearCompleted()"
-                              data-ng-show="remainingCount < tasks.length">Clear completed ({{tasks.length - remainingCount}})</span>
-                    </li>
-                </ul>
-            </footer>
+                </div>
 
-        </section>
-    <!-- </div> -->
-
-    <div class="callout callout-info">
-        <p>Obs:</p>
-        <p> - hehehe</p>
-        <p> - hehe</p>
-        <p> - he</p>
-    </div>
+                <button type="submit"
+                        class="btn btn-success"
+                        data-ng-disabled="!canSubmit()"
+                        >Criar</button>
+                <button class="btn btn-default"
+                        data-ng-disabled="!canRevert()"
+                        data-ng-click="revert()"
+                        >Limpar</button>
+            </form>
+        </div>
+    </section>
 </div>

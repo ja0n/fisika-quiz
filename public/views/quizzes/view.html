@@ -16,7 +16,7 @@
                         <tr ng-repeat="data in viewData">
                             <td>{{$index + 1}}</td>
                             <td>{{data.name}}</td>
-                            <td>{{data.professor.name}}</td>
+                            <td>{{data.created_by.name}}</td>
                             <td>
                               <a data-ng-if="auth.user.role == 'student'"
                                  href="#/quizzes/answer/{{data._id}}"class="btn btn-w-md btn-gap-v btn-info">Responder</a>

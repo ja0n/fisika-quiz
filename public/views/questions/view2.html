@@ -1,0 +1,107 @@
+<div class="page">
+    <section class="panel panel-default table-dynamic">
+        <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Questões</strong></div>
+        <div class="panel-body">
+            <div class="table-filters">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-6">
+                        <form>
+                            <input type="text"
+                                   placeholder="Nome..."
+                                   class="form-control"
+                                   data-ng-model="searchKeywords"
+                                   data-ng-keyup="search()">
+                        </form>
+                    </div>
+                    <div class="col-sm-3 col-xs-6 filter-result-info">
+                        <span>
+                            Mostrando {{filteredStores.length}} de {{stores.length}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th><div class="th">
+                            Nome
+                            <span class="fa fa-angle-up"
+                                  data-ng-click=" order('title') "
+                                  data-ng-class="{active: row == 'title'}"></span>
+                            <span class="fa fa-angle-down"
+                                  data-ng-click=" order('-title') "
+                                  data-ng-class="{active: row == '-title'}"></span>
+                        </div></th>
+                        <th><div class="th">
+                            Criador
+                            <span class="fa fa-angle-up"
+                                  data-ng-click=" order('created_by.name') "
+                                  data-ng-class="{active: row == 'created_by.name'}"></span>
+                            <span class="fa fa-angle-down"
+                                  data-ng-click=" order('-created_by.name') "
+                                  data-ng-class="{active: row == '-created_by.name'}"></span>
+                        </div></th>
+                        <th><div class="th">
+                            Opções
+                        </div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="store in currentPageStores">
+                        <td>{{store.title}}</td>
+                        <td>{{store.created_by.name}}</td>
+                        <td>
+                          <a ng-click="previewQuestion(store._id)" class="btn btn-w-md btn-gap-v btn-info">Visualizar</a>
+                          <a data-ng-if="auth.user.role !== 'student'"
+                           href="#/quizzes/submissions/{{store._id}}" class="btn btn-w-md btn-gap-v btn-info">Ver Submissões</a>
+                          <a data-ng-if="store.professor._id == auth.user._id || auth.user.role == 'admin'"
+                           href="#/questions/edit/{{store._id}}"class="btn btn-w-md btn-gap-v btn-warning">Editar</a>
+                          <a data-ng-if="store.professor._id == auth.user._id || auth.user.role == 'admin'"
+                           ng-click="deleteById('quizzes', viewData, $index, store._id)"
+                           class="btn btn-w-md btn-gap-v btn-danger">Excluir</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <footer class="table-footer">
+                <div class="row">
+                    <div class="col-md-6 page-num-info">
+                        <span>
+                            Mostrar
+                            <select data-ng-model="numPerPage"
+                                    data-ng-options="num for num in numPerPageOpt"
+                                    data-ng-change="onNumPerPageChange()">
+                            </select>
+                            entradas por página
+                        </span>
+                    </div>
+                    <div class="col-md-6 text-right pagination-container">
+                        <pagination class="pagination-sm"
+                                    ng-model="currentPage"
+                                    total-items="filteredStores.length"
+                                    max-size="4"
+                                    ng-change="select(currentPage)"
+                                    items-per-page="numPerPage"
+                                    rotate="false"
+                                    first-text="Primeira" last-text="Última"
+                                    previous-text="&lsaquo;" next-text="&rsaquo;"
+                                    boundary-links="true"></pagination>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </section>
+</div>
+
+<script type="text/ng-template" id="previewModal.html">
+    <div class="modal-header">
+        <h3>{{ title }}</h3>
+    </div>
+    <div class="modal-body" ng-bind-html="description">
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">Fechar</button>
+    </div>
+</script>

@@ -1,0 +1,73 @@
+<div class="page page-tasks">
+        <section class="">
+            <!-- <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Criar Marcação</strong></div>
+            <div class="panel-body"> -->
+            <section>
+                <h3>Responder Lista de Exercícios</h3>
+                <h4 data-ng-bind="quizz.name"></h4>
+                <div class="divider"></div>
+                <tabset justified="true" class="ui-tab">
+                    <tab ng-repeat="question in quizz.questions" heading="{{question.title}}" active="question.active" disabled="question.disabled">
+                        <ul class="task-list list-unstyled">
+                            <textarea readonly
+                                   class="form-control"
+                                   data-ng-trim="false"
+                                   data-ng-model="question.description"> </textarea>
+                            <!-- <li data-ng-class="{ editing: false }">
+                                <span class="view">
+                                    <label>{{question.description}}</label>
+                                </span>
+                            </li> -->
+                        </ul>
+                        <ul class="task-list list-unstyled">
+                            <li data-ng-repeat="task in question.alternatives"
+                                data-ng-class="{completed: task.completed, editing: false}">
+                                <span class="view">
+                                    <input type="radio"
+                                           class="toggle-task"
+                                           name="question{{$parent.$index}}"
+                                           data-ng-model="answers[$parent.$index]"
+                                           data-ng-value="$index">
+                                    <label>{{ indexChar($index) + ') '}} {{task.description}}</label>
+                                </span>
+
+                            </li>
+                        </ul>
+                    </tab>
+                </tabset>
+            </section>
+
+            <footer class="task-footer">
+                <ul class="list-inline clearfix">
+                    <li class="first-item">
+                        <form data-ng-submit="submitForm()">
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    data-ng-disabled="!canSubmit()"
+                                    >Submeter</button>
+                        </form>
+                    </li>
+                    <li class="text-center">
+                        <span>
+                            <strong>{{remainingCount}}</strong>
+                            <span class="text-muted"
+                                  data-ng-pluralize count="remainingCount"
+                                  when="{one: 'item left', other: 'items left'}"></span>
+                        </span>
+                    </li>
+                    <li class="text-right">
+                        <span class="clear-completed"
+                              data-ng-click="clearCompleted()"
+                              data-ng-show="remainingCount < tasks.length">Clear completed ({{tasks.length - remainingCount}})</span>
+                    </li>
+                </ul>
+            </footer>
+
+        </section>
+    <!-- </div> -->
+
+    <div class="callout callout-info">
+        <p>Obs:</p>
+        <p> - Quando você responder todas questões o botão de submeter será liberado.</p>
+    </div>
+</div>

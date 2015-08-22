@@ -8,16 +8,7 @@
                 <div class="divider"></div>
                 <tabset justified="true" class="ui-tab">
                     <tab ng-repeat="question in quizz.questions" heading="{{question.title}}" active="question.active" disabled="question.disabled">
-                        <ul class="task-list list-unstyled">
-                            <textarea readonly
-                                   class="form-control"
-                                   data-ng-trim="false"
-                                   data-ng-model="question.description"> </textarea>
-                            <!-- <li data-ng-class="{ editing: false }">
-                                <span class="view">
-                                    <label>{{question.description}}</label>
-                                </span>
-                            </li> -->
+                        <ul class="task-list list-unstyled" ng-bind-html="question.description">
                         </ul>
                         <ul class="task-list list-unstyled">
                             <li data-ng-repeat="task in question.alternatives"

@@ -6,7 +6,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 Controller.create = function (req, res) {
 	var data = req.body;
-	data.professor = new ObjectId(req.session.user._id);
+	data.created_by = new ObjectId(req.session.user._id);
 
 	var model = new Model(data);
 
@@ -21,7 +21,7 @@ Controller.create = function (req, res) {
 Controller.retrieveAll = function (req, res) {
 	var query = { };
 
-	Model.find(query, { hash: 0, salt: 0 }).populate('professor', '-hash -salt').exec(function(err, data) {
+	Model.find(query, { hash: 0, salt: 0 }).populate('created_by', '-hash -salt').exec(function(err, data) {
 		if(err) {
 			console.log('ERROR: ', err);
 			res.json({ err: true });
@@ -45,7 +45,7 @@ Controller.retrieveById = function (req, res) {
 	var query = { _id: id };
 
 	Model.findOne(query, { hash: 0, salt: 0 })
-							 .populate('professor submissions.student', '-salt -hash')
+							 .populate('created_by questions submissions.student', '-salt -hash')
 							 .exec(function (err, data) {
 		if(err) {
 			console.log('ERROR: ', err);

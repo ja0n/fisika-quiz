@@ -1,6 +1,6 @@
 ;(function() {
 	'use strict';
-	angular.module('app', ['ngRoute','app.form.validation', 'ngAnimate', 'ui.bootstrap', 'auth.service', 'easypiechart', 'mgo-angular-wizard', 'app.ui.services', 'app.controllers', 'app.directives', 'app.ui.form.directives', 'app.localization', 'app.chart.directives'])
+	angular.module('app', ['ngRoute', 'ngAnimate', 'ngSanitize','app.form.validation', 'ui.bootstrap', 'auth.service', 'easypiechart', 'mgo-angular-wizard', 'app.ui.services', 'app.controllers', 'app.directives', 'app.ui.form.directives', 'app.localization', 'app.chart.directives'])
 	.config(['$routeProvider', function($routeProvider) {
 		return $routeProvider.when('/', {
 			redirectTo: '/dashboard'
@@ -41,6 +41,21 @@
 		}).when('/quizzes/edit', {
 			templateUrl: 'views/quizzes/form.html',
 			controller: 'CreateQuizCtrl'
+		}).when('/questions', {
+			templateUrl: 'views/questions/view2.html',
+			controller: 'ViewQuestionsCtrl'
+		}).when('/questions/create', {
+			templateUrl: 'views/questions/form.html',
+			controller: 'CreateQuestionCtrl'
+		}).when('/questions/answer/:id', {
+			templateUrl: 'views/questions/answer.html',
+			controller: 'AnswerQuestionCtrl'
+		}).when('/questions/submissions/:id', {
+			templateUrl: 'views/questions/submissions.html',
+			controller: 'SubmissionsQuestionCtrl'
+		}).when('/questions/edit/:id', {
+			templateUrl: 'views/questions/form.html',
+			controller: 'CreateQuestionCtrl'
 		}).when('/pages/features', {
 			templateUrl: 'views/pages/features.html'
 		}).when('/login', {

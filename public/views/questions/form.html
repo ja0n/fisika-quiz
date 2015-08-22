@@ -1,0 +1,88 @@
+<div class="page page-tasks">
+    <section class="panel panel-default">
+        <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Criar Questão</strong></div>
+        <div class="panel-body">
+            <section>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name">Nome</label>
+                            <input type="text"
+                             class="edit form-control"
+                             data-ng-trim="false"
+                             data-ng-model="question.title"
+                             required
+                             autofocus>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="password">Categoria</label><br>
+                            <span class="ui-select" style="margin-left: 0;">
+                                <select data-ng-model="question.tags">
+                                    <option ng-repeat="tag in selectData" value="tag">
+                                      {{ tag }}
+                                    </option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <textarea type="text" id="test"
+                       placeholder="Descrição"
+                       class="edit form-control"
+                       data-ng-trim="false"
+                       data-ng-model="question.description"> </textarea>
+                <br>
+                <form data-ng-submit="addAlt(this)" class="add-task">
+                    <input type="text"
+                           placeholder="Adicionar Alternativa"
+                           class="form-control"
+                           data-ng-model="newAlt">
+                    <a type="submit" class="submit-button" data-ng-click="addAlt(this)">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                </form>
+                <br>
+                <ul class="task-list list-unstyled">
+                    <li data-ng-repeat="task in question.alternatives"
+                        data-ng-class="{completed: task.completed, editing: task == editedTask}">
+                        <span class="view">
+                            <input type="radio"
+                                   class="toggle-task"
+                                   name="question{{$parent.$index}}"
+                                   data-ng-model="question.answer"
+                                   data-ng-value="$index">
+                            <label data-ng-dblclick="edit(task)">{{ indexChar($index) + ') ' + task.description }}</label>
+                            <span class="glyphicon glyphicon-pencil"
+                                  data-ng-click="edit(task)"></span>
+                            <span class="glyphicon glyphicon-remove"
+                                  data-ng-click="remove(task, question.alternatives, $index)"
+                                  ></span>
+                        </span>
+                        <form data-ng-submit="doneEditing(task, $index, $event)">
+                            <input type="text"
+                                   class="edit form-control"
+                                   data-ng-trim="false"
+                                   data-ng-model="task.description"
+                                   data-ng-blur="doneEditing(task, $index, $event)"
+                                   data-task-focus="task == editedTask">
+                        </form>
+                    </li>
+                </ul>
+                <button type="submit"
+                        class="btn btn-success"
+                        data-ng-disabled="!canSubmit()"
+                        data-ng-click="submitForm()"
+                        >Criar</button>
+            </section>
+        </div>
+    </section>
+    <div class="callout callout-info">
+        <p>Obs:</p>
+        <p> - hehehe</p>
+        <p> - hehe</p>
+        <p> - he</p>
+    </div>
+</div>
