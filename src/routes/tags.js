@@ -5,7 +5,7 @@ var Router = express.Router();
 var collection = db.collection('conf');
 
 Router.get('/tags', function (req, res) {
-	collection.findOne({ name: 'tags'}, function(err, data) {
+	collection.findOne({ name: 'tags' }, function(err, data) {
 		if(err) throw err;
 		if(data) res.json(data);
 	});

@@ -2,6 +2,4 @@
 	"environment": "development",
 	"port": 3000,
 	"dbURI": "mongodb://localhost/pope"
-
-
 }

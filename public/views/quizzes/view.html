@@ -21,7 +21,9 @@
                               <a data-ng-if="auth.user.role == 'student'"
                                  href="#/quizzes/answer/{{data._id}}"class="btn btn-w-md btn-gap-v btn-info">Responder</a>
                               <a data-ng-if="auth.user.role !== 'student'"
-                                 href="#/quizzes/submissions/{{data._id}}"class="btn btn-w-md btn-gap-v btn-info">Ver Submissões</a>
+                                 href="#/quizzes/answer/{{data._id}}"class="btn btn-w-md btn-gap-v btn-info">Visualizar</a>
+                              <!-- <a data-ng-if="auth.user.role !== 'student'"
+                                 href="#/quizzes/submissions/{{data._id}}"class="btn btn-w-md btn-gap-v btn-info">Ver Submissões</a> -->
                               <a data-ng-if="data.professor._id == auth.user._id || auth.user.role == 'admin'"
                                  href="#/quizzes/edit/{{data._id}}"class="btn btn-w-md btn-gap-v btn-warning">Editar</a>
                               <a data-ng-if="data.professor._id == auth.user._id || auth.user.role == 'admin'"

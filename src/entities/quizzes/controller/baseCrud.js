@@ -51,8 +51,8 @@ Controller.retrieveById = function (req, res) {
 			console.log('ERROR: ', err);
 			res.json({ err: true });
 		} else {
-			if(!req.session.user.quizzesTime) req.session.user.quizzesTime = {};
-			req.session.user.quizzesTime[data._id] = Date.now();
+			// if(!req.session.user.quizzesTime) req.session.user.quizzesTime = {};
+			// req.session.user.quizzesTime[data._id] = Date.now();
 			res.json(data || { err: true });
 		}
 	});
@@ -69,12 +69,13 @@ Controller.submitById = function (req, res) {
 			console.log('ERROR: ', err);
 			res.json({ err: true });
 		} else {
-			if(!data || !req.session.user.quizzesTime[id]) res.json({ err: true });
+			// if(!data || !req.session.user.quizzesTime[id]) res.json({ err: true });
+			if(!data) res.json({ err: true });
 
 			data.submissions.push({
 				student: new ObjectId(req.session.user._id),
 				answers: submission,
-				time_spent: Date.now() - req.session.user.quizzesTime[id]
+				// time_spent: Date.now() - req.session.user.quizzesTime[id]
 			});
 
 			delete req.session.user.quizzesTime[id];

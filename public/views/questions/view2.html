@@ -53,11 +53,11 @@
                         <td>{{store.created_by.name}}</td>
                         <td>
                           <a ng-click="previewQuestion(store._id)" class="btn btn-w-md btn-gap-v btn-info">Visualizar</a>
-                          <a data-ng-if="auth.user.role !== 'student'"
-                           href="#/quizzes/submissions/{{store._id}}" class="btn btn-w-md btn-gap-v btn-info">Ver Submissões</a>
-                          <a data-ng-if="store.professor._id == auth.user._id || auth.user.role == 'admin'"
+                          <!-- <a data-ng-if="auth.user.role !== 'student'"
+                           href="#/quizzes/submissions/{{store._id}}" class="btn btn-w-md btn-gap-v btn-info">Ver Submissões</a> -->
+                          <a data-ng-if="store.created_by._id == auth.user._id || auth.user.role == 'admin'"
                            href="#/questions/edit/{{store._id}}"class="btn btn-w-md btn-gap-v btn-warning">Editar</a>
-                          <a data-ng-if="store.professor._id == auth.user._id || auth.user.role == 'admin'"
+                          <a data-ng-if="store.created_by._id == auth.user._id || auth.user.role == 'admin'"
                            ng-click="deleteById('quizzes', viewData, $index, store._id)"
                            class="btn btn-w-md btn-gap-v btn-danger">Excluir</a>
                         </td>
@@ -99,7 +99,19 @@
     <div class="modal-header">
         <h3>{{ title }}</h3>
     </div>
-    <div class="modal-body" ng-bind-html="description">
+    <div class="modal-body">
+      <div class="description" ng-bind-html="description"></div>
+      <hr>
+      <div class="alternatives">
+        <span ng-repeat="alternative in alternatives track by $index" class="list-unstyled">
+            <label class="ui-radio">
+              <input type="checkbox" ng-checked="$index == answer" disabled>
+              <span>
+                {{ indexChar($index) + ') ' + alternative.description }}
+              </span>
+            </label><br>
+        </span>
+      </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="ok()">Fechar</button>

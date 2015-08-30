@@ -188,10 +188,12 @@ angular.module('app.controllers')
 	$scope.previewQuestion = function(id) {
 	  return $modal.open({
 	    templateUrl: "previewModal.html",
-	    controller: function($scope, $rootScope, $modalInstance, $http, $sanitize) {
+	    controller: function($scope, $rootScope, $modalInstance, $http, $sce) {
 				$http.get(url + id).success(function (data) {
 					$scope.title = data.title;
-					$scope.description = data.description;
+					$scope.description = $sce.trustAsHtml(data.description);
+					$scope.alternatives = data.alternatives;
+					$scope.answer = data.answer;
 				});
 
 	      $scope.ok = function() {

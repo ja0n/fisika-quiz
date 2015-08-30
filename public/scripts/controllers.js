@@ -333,10 +333,12 @@ angular.module('app.controllers')
 	$scope.previewQuestion = function(id) {
 	  return $modal.open({
 	    templateUrl: "previewModal.html",
-	    controller: function($scope, $rootScope, $modalInstance, $http, $sanitize) {
+	    controller: function($scope, $rootScope, $modalInstance, $http, $sce) {
 				$http.get(url + id).success(function (data) {
 					$scope.title = data.title;
-					$scope.description = data.description;
+					$scope.description = $sce.trustAsHtml(data.description);
+					$scope.alternatives = data.alternatives;
+					$scope.answer = data.answer;
 				});
 
 	      $scope.ok = function() {
@@ -405,36 +407,67 @@ angular.module('app.controllers')
 	$scope.showInfoOnSubmit = !1, original = angular.copy($scope.quizz);
 
 	$scope.revert = function() {
-		return $scope.quizz = angular.copy(original)
-	}
+		return $scope.quizz = angular.copy(original);
+	};
 	$scope.canRevert = function() {
-		return !angular.equals($scope.quizz, original)
-	}
+		return !angular.equals($scope.quizz, original);
+	};
 	$scope.canSubmit = function() {
-		return !angular.equals($scope.quizz, original)
-	}
+		return !angular.equals($scope.quizz, original);
+	};
 	$scope.submitForm = function() {
 		var url = $scope.rootUrl + '/api/quizzes';
 
 		for (var i in $scope.questions)
 			if ($scope.questions[i].selected)
-				$scope.quizz.questions.push($scope.questions[i]._id)
+				$scope.quizz.questions.push($scope.questions[i]._id);
 				//$scope.quizz.questions.push($scope.questions[i])
 
 		console.log($scope.quizz);
     $http.post(url, $scope.quizz).success(function(data) {
       $location.path('/quizzes');
-    	$scope.revert()
+    	$scope.revert();
       return logger.logSuccess('Operação realizada com sucesso.');
 
     }).error(function(data) {
       logger.logError('Ocorreu algum problema.');
     });
-	}
+	};
 })
-.controller('AnswerQuizCtrl', function($scope, $http, $routeParams, $location, $modal, logger) {
+.controller('AnswerQuizCtrl', function($scope, $http, $routeParams, $location, $modal, $sce, logger) {
 	var id = $routeParams.id; $scope.answers = [];
 	var original;
+
+	$scope.ue = { oi: 'oi' };
+	$scope.okkk = "eae";
+	$scope.index = 0;
+
+
+	$scope.setIndex = function(index) {
+		$scope.index = index;
+	};
+
+	$scope.next = function() {
+		if($scope.index < $scope.quizz.questions.length) $scope.index++;
+		$scope.quizz.questions[$scope.index].active = true;
+	};
+
+	$scope.prev = function() {
+		if($scope.index > 0) $scope.index--;
+		$scope.quizz.questions[$scope.index].active = true;
+	};
+
+	$scope.verify = function(index) {
+		if($scope.answers[index] === undefined) {
+			logger.logWarning('Escolha uma opção');
+		} else if($scope.answers[index] == $scope.quizz.questions[index].answer) {
+			logger.logSuccess('Correto')
+
+		} else {
+			logger.logError('Errado');
+
+		}
+	};
 
 	var url = $scope.rootUrl + '/api/quizzes/' + id;
 	$http.get(url).success(function(data) {
@@ -445,9 +478,11 @@ angular.module('app.controllers')
 		console.log(data);
 		$scope.quizz = data;
 		$scope.answers = new Array(data.questions.length);
-		for (var i = 0; i < $scope.answers.length; i++) $scope.answers[i] = null;
+		for (var i = 0; i < $scope.answers.length; i++)
+			$scope.quizz.questions[i].description = $sce.trustAsHtml($scope.quizz.questions[i].description);
+		// for (var i = 0; i < $scope.answers.length; i++) $scope.answers[i] = null;
 
-		$scope.showInfoOnSubmit = !1, original = angular.copy($scope.quizz);
+		$scope.showInfoOnSubmit = !1; original = angular.copy($scope.quizz);
 	}).error(function(data) {
 		logger.logWarning('Ocorreu algum problema.');
 		$location.path('/quizzes');
@@ -457,23 +492,22 @@ angular.module('app.controllers')
 
 	$scope.revert = function() {
 		return $scope.quizz = angular.copy(original)
-	}
+	};
 	$scope.canRevert = function() {
 		return !angular.equals($scope.quizz, original)
-	}
+	};
 	$scope.canSubmit = function() {
 		return $scope.answers.indexOf(null) == -1
-	}
+	};
 	$scope.submitForm = function() {
-    $http.post(url, { submission: $scope.answers}).success(function(data) {
+    $http.post(url, { submission: $scope.answers }).success(function(data) {
       $location.path('/quizzes');
     	$scope.revert()
       return logger.logSuccess('Operação realizada com sucesso.');
-
     }).error(function(data) {
       logger.logError('Ocorreu algum problema.');
     });
-	}
+	};
 })
 .controller('SubmissionsQuizCtrl', function($scope, $http, $routeParams, $location, $modal, logger) {
 	var id = $routeParams.id; $scope.answers = [];
