@@ -101,4 +101,19 @@ Router.all('/logout', function(req, res) {
   res.send('Buh bye! (>^~^)>');
 });
 
+Router.post('/signup', function(req, res) {
+  if (!req.body.password)
+    res.json({ err: true, msg: 'password required!' });
+  else {
+    pwd.hash(req.body.password, function(err, salt, hash) {
+      if (err) throw err;
+      var registerStudent = require('./entities/students/controller').create;
+      delete req.body.password;
+      req.body.salt = salt;
+      req.body.hash = hash.toString();
+      registerStudent.call(this, req, res);
+    });
+  }
+});
+
 module.exports = Router;

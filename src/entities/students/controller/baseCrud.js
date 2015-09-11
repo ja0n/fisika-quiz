@@ -2,17 +2,23 @@ var Model = require('./../model')
 	, Controller = {}
 	, ROLE = 'student'
 	;
-	
+
 Controller.create = function (req, res) {
 	var data = req.body;
 	data.role = ROLE;
 	var model = new Model(data);
 
-	model.save(function(err, data) {
-		if(err) {
-			console.log('ERROR: ', err);
-			res.json({ err: true, msg: err });
-		} else res.json({ success: true });
+	Model.findOne({ email: data.email }, function(err, data) {
+		if(data === null) {
+			model.save(function(err, data) {
+				if(err) {
+					console.log('ERROR: ', err);
+					res.json({ err: true, msg: err });
+				} else res.json({ success: true });
+			});
+		} else {
+			res.json({ err: true, msg: 'Email already in use.' })
+		}
 	});
 };
 

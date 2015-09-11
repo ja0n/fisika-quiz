@@ -14,7 +14,7 @@ angular.module('app.controllers', [])
 
 	$scope.isSpecificPage = function() {
 		var path;
-		return path = $location.path(), _.contains(['/404', '/pages/500', '/login', '/pages/signin', '/pages/signin1', '/pages/signin2', '/pages/signup', '/pages/signup1', '/pages/signup2'], path);
+		return path = $location.path(), _.contains(['/404', '/pages/500', '/login', '/signup'], path);
 	};
 
 	$scope.submitLogin = function(user) {
@@ -50,11 +50,32 @@ angular.module('app.controllers', [])
 			logger.logWarning('Ocorreu algum problema.');
 		});
 	};
+	
 	return $scope.auth = auth, $scope.deleteById;
 })
 .controller('NavCtrl', function($scope, filterFilter) {
 	return null;
 })
-.controller('DashboardCtrl', ['$scope', function($scope) {
+.controller('DashboardCtrl', function($scope) {
 	return;
-}])
+})
+.controller('SignUpCtrl', function($scope, $http, $location, logger) {
+	$scope.user = {};
+	$scope.submit = function(user) {
+		var url = $scope.rootUrl + '/signup';
+		if(user.email && user.password && user.name) {
+			$http.post(url, user).success(function(data) {
+				console.log(data);
+				if(data.err) {
+					logger.logError('Algo deu errado');
+				} else {
+					logger.logSuccess('Registrado com sucesso!');
+					$location.path('/login');
+				}
+			});
+		} else {
+			logger.logWarning('Preencha todos os campos');
+		}
+	};
+	return;
+})

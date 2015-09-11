@@ -8,7 +8,7 @@
     var user = sessionStorage.sessionData ? JSON.parse(sessionStorage.sessionData) : null
 
     function load() {
-      if($location.path() == '/login') return null;
+      if(['/login', '/signup'].indexOf($location.path()) != -1) return null;
       return user ? user : user = sessionStorage.sessionData ? JSON.parse(sessionStorage.sessionData) : goToLogin('Precisa estar logado!')
     }
 

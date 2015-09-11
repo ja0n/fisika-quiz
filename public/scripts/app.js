@@ -62,8 +62,9 @@
 			templateUrl: 'views/pages/login.html'
 		}).when('/pages/signin', {
 			templateUrl: 'views/pages/signin.html'
-		}).when('/pages/signup', {
-			templateUrl: 'views/pages/signup.html'
+		}).when('/signup', {
+			templateUrl: 'views/pages/signup.html',
+			controller: 'SignUpCtrl'
 		}).when('/pages/profile', {
 			templateUrl: 'views/pages/profile.html'
 		}).when('/404', {
