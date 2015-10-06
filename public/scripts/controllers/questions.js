@@ -206,6 +206,24 @@ angular.module('app.controllers')
 	  });
 	};
 
+	$scope.remove = function(data) {
+		//deleta do store original
+		//e recalcula o currentPageStores
+		var url = $scope.rootUrl + '/api/' + 'questions' + '/' + data._id;
+
+		$http.delete(url).success(function() {
+			var index = $scope.stores.indexOf(data);
+			if(index != -1) {
+				$scope.stores.splice(index, 1);
+				$scope.search();
+				$scope.select($scope.currentPage);
+				logger.logSuccess('Operação realizada com sucesso.');
+			}
+		}).error(function(data) {
+			logger.logWarning('Ocorreu algum problema.');
+		});
+	};
+
 	return $scope.searchKeywords = "",
 	$scope.filteredStores = [],
 	$scope.row = "",

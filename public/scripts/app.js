@@ -38,7 +38,7 @@
 		}).when('/quizzes/submissions/:id', {
 			templateUrl: 'views/quizzes/submissions.html',
 			controller: 'SubmissionsQuizCtrl'
-		}).when('/quizzes/edit', {
+		}).when('/quizzes/edit/:id', {
 			templateUrl: 'views/quizzes/form.html',
 			controller: 'CreateQuizCtrl'
 		}).when('/questions', {

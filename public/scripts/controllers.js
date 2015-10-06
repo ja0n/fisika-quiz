@@ -3,6 +3,7 @@
 
 angular.module('app.controllers', [])
 .controller('AppCtrl', function($scope, $location, $http, logger, auth) {
+	$scope._ = _;
 	$scope.rootUrl = 'http://' + location.host;
 	$scope.main = {
 		brand: 'POPE',
@@ -51,7 +52,7 @@ angular.module('app.controllers', [])
 			logger.logWarning('Ocorreu algum problema.');
 		});
 	};
-	
+
 	return $scope.auth = auth, $scope.deleteById;
 })
 .controller('NavCtrl', function($scope, filterFilter) {
@@ -372,6 +373,24 @@ angular.module('app.controllers')
 	  });
 	};
 
+	$scope.remove = function(data) {
+		//deleta do store original
+		//e recalcula o currentPageStores
+		var url = $scope.rootUrl + '/api/' + 'questions' + '/' + data._id;
+
+		$http.delete(url).success(function() {
+			var index = $scope.stores.indexOf(data);
+			if(index != -1) {
+				$scope.stores.splice(index, 1);
+				$scope.search();
+				$scope.select($scope.currentPage);
+				logger.logSuccess('Operação realizada com sucesso.');
+			}
+		}).error(function(data) {
+			logger.logWarning('Ocorreu algum problema.');
+		});
+	};
+
 	return $scope.searchKeywords = "",
 	$scope.filteredStores = [],
 	$scope.row = "",
@@ -456,11 +475,11 @@ angular.module('app.controllers')
 	};
 })
 .controller('AnswerQuizCtrl', function($scope, $http, $routeParams, $location, $modal, $sce, logger) {
-	var id = $routeParams.id; $scope.answers = [];
+	var id = $routeParams.id;
+	$scope.answers = [];
+	$scope.attempts = [];
 	var original;
 
-	$scope.ue = { oi: 'oi' };
-	$scope.okkk = "eae";
 	$scope.index = 0;
 
 
@@ -479,15 +498,18 @@ angular.module('app.controllers')
 	};
 
 	$scope.verify = function(index) {
+		if(!$scope.attempts[index]) $scope.attempts[index] = [];
+
 		if($scope.answers[index] === undefined) {
 			logger.logWarning('Escolha uma opção');
 		} else if($scope.answers[index] == $scope.quizz.questions[index].answer) {
-			logger.logSuccess('Correto')
-
+			$scope.attempts[index].push($scope.answers[index]);
+			logger.logSuccess('Correto');
 		} else {
+			$scope.attempts[index].push($scope.answers[index]);
 			logger.logError('Errado');
-
 		}
+		console.log($scope.attempts);
 	};
 
 	var url = $scope.rootUrl + '/api/quizzes/' + id;
@@ -499,6 +521,7 @@ angular.module('app.controllers')
 		console.log(data);
 		$scope.quizz = data;
 		$scope.answers = new Array(data.questions.length);
+		$scope.attempts = _.range(data.questions.length).map(function() { return [] });
 		for (var i = 0; i < $scope.answers.length; i++)
 			$scope.quizz.questions[i].description = $sce.trustAsHtml($scope.quizz.questions[i].description);
 		// for (var i = 0; i < $scope.answers.length; i++) $scope.answers[i] = null;
@@ -512,13 +535,13 @@ angular.module('app.controllers')
 	$scope.showInfoOnSubmit = !1, original = angular.copy($scope.quizz);
 
 	$scope.revert = function() {
-		return $scope.quizz = angular.copy(original)
+		return $scope.quizz = angular.copy(original);
 	};
 	$scope.canRevert = function() {
-		return !angular.equals($scope.quizz, original)
+		return !angular.equals($scope.quizz, original);
 	};
 	$scope.canSubmit = function() {
-		return $scope.answers.indexOf(null) == -1
+		return $scope.answers.indexOf(null) == -1;
 	};
 	$scope.submitForm = function() {
     $http.post(url, { submission: $scope.answers }).success(function(data) {
@@ -547,8 +570,7 @@ angular.module('app.controllers')
 	});
 
 	$scope.openModal = function(submission) {
-	  var modalInstance;
-	  modalInstance = $modal.open({
+	  var modalInstance = $modal.open({
 	    templateUrl: "submissionModal.html",
 	    controller: function($scope, $rootScope, $modalInstance, questions) {
 	      $scope.name = submission.student.name;
@@ -571,11 +593,12 @@ angular.module('app.controllers')
 	        return $scope.quizz.questions;
 	      }
 	    }
-	  }), modalInstance.result.then(function(selectedItem) {
+	  });
+		modalInstance.result.then(function(selectedItem) {
 	    $scope.selected = selectedItem
 	  }, function() {
 	    //$log.info("Modal dismissed at: " + new Date)
-	  })
+	  });
 	};
 
 })
@@ -584,7 +607,6 @@ angular.module('app.controllers')
 	$http.get(url).success(function(data) {
 		$scope.viewData = data;
 	});
-
 })
 
 },{}],5:[function(require,module,exports){

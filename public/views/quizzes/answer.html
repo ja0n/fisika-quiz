@@ -6,16 +6,19 @@
             <!-- <div class="divider"></div> -->
             <tabset type="pills" justified="true" class="ui-tab">
                 <tab ng-repeat="question in quizz.questions" heading="Questão {{ $index + 1 }}" active="question.active" select="setIndex($index)">
-                    <div class="" ng-bind-html="question.description" style="padding: 20px 10px 0px 10px">
+                    <div class="" ng-bind-html="question.description" style="padding: 20px 10px 0px 10px; max-width: 600px">
                     </div>
                     <hr>
                     <ul class="task-list list-unstyled">
                         <li data-ng-repeat="alternative in question.alternatives">
-                            <span class="view">
+                            <span class="view"
+                                  ng-class="{ wrong: _.include(attempts[$parent.$index], $index) && question.answer !== $index,
+                                              correct: _.include(attempts[$parent.$index], $index) && question.answer === $index}">
                                 <input type="radio"
                                        name="question{{$parent.$index}}"
-                                       data-ng-model="answers[$parent.$index]"
-                                       data-ng-value="$index">
+                                       ng-model="answers[$parent.$index]"
+                                       ng-value="$index"
+                                       ng-disabled=" _.include(attempts[$parent.$index], $index) || _.include(attempts[$parent.$index], question.answer)" >
                                 <label>{{ indexChar($index) + ') ' + alternative.description}}</label>
                             </span>
                         </li>
@@ -26,7 +29,7 @@
 
         <div class="btn-group btn-group-justified">
             <a class="btn btn-default" ng-class="{ disabled: index === 0 }" role="button" ng-click="prev()">&lsaquo; Anterior</a>
-            <a class="btn btn-primary" role="button" ng-click="verify(index)">Verificar</a>
+            <a class="btn btn-primary" role="button" ng-click="verify(index)" ng-disabled="_.include(attempts[index], quizz.questions[index].answer)" >Verificar</a>
             <a class="btn btn-default" ng-class="{ disabled: index === quizz.questions.length-1 }" role="button" ng-click="next()">Próxima &rsaquo;</a>
         </div>
 

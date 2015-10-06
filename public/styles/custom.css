@@ -1,0 +1,12 @@
+.vertical * {
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+.correct {
+  background-color: #4fb542 !important;
+}
+
+.wrong {
+  background-color: #e38686 !important;
+}
